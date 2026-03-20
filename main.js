@@ -1,415 +1,454 @@
-/**
- * Berlucchi Sustainability Report - Interactive Experience
- * "Quiet Luxury" Animation System
- * 
- * Principles:
- * - Slow, intentional, refined (400-700ms durations)
- * - cubic-bezier(0.25, 0.1, 0.25, 1) easing
- * - No bounce, no elastic, no aggressive motion
- * - Everything serves the content
- */
+// Data Store: Historical sustainability data 2019-2024
+const sustainabilityData = {
+    2019: {
+        vignetoProprio: 80,
+        ettariPartner: 200,
+        valoreGenerato: 45.2,
+        bottiglie: 3.5,
+        paesiServiti: 35,
+        fotovoltaico: 20,
+        rifiutiRecupero: 70,
+        dipendenti: 65,
+        visitatori: 15000,
+        materialitaFocus: ["Ambiente", "Governance"],
+        filieraHighlights: ["Vigneto", "Vinificazione"],
+        insight: "Anno base: definizione standard ESG"
+    },
+    2020: {
+        vignetoProprio: 82,
+        ettariPartner: 205,
+        valoreGenerato: 42.1, // COVID impact
+        bottiglie: 3.2,
+        paesiServiti: 36,
+        fotovoltaico: 28,
+        rifiutiRecupero: 75,
+        dipendenti: 62, // Reduced due to pandemic
+        visitatori: 5000, // COVID impact
+        materialitaFocus: ["Sociale", "Ambiente"],
+        filieraHighlights: ["Confezionamento", "Distribuzione"],
+        insight: "-7% fatturato, +40% energia rinnovabile"
+    },
+    2021: {
+        vignetoProprio: 85,
+        ettariPartner: 215,
+        valoreGenerato: 48.5,
+        bottiglie: 3.6,
+        paesiServiti: 40,
+        fotovoltaico: 38,
+        rifiutiRecupero: 82,
+        dipendenti: 68,
+        visitatori: 8000,
+        materialitaFocus: ["Territorio", "Sociale"],
+        filieraHighlights: ["Hospitality", "Vigneto"],
+        insight: "Ripresa post-pandemica, focus territorio"
+    },
+    2022: {
+        vignetoProprio: 90,
+        ettariPartner: 225,
+        valoreGenerato: 52.3,
+        bottiglie: 3.9,
+        paesiServiti: 45,
+        fotovoltaico: 48,
+        rifiutiRecupero: 88,
+        dipendenti: 72,
+        visitatori: 12000,
+        materialitaFocus: ["Ambiente", "Innovazione"],
+        filieraHighlights: ["Vinificazione", "Hospitality"],
+        insight: "+15% export, espansione fotovoltaico"
+    },
+    2023: {
+        vignetoProprio: 92,
+        ettariPartner: 235,
+        valoreGenerato: 56.1,
+        bottiglie: 4.1,
+        paesiServiti: 48,
+        fotovoltaico: 58,
+        rifiutiRecupero: 92,
+        dipendenti: 75,
+        visitatori: 16000,
+        materialitaFocus: ["Governance", "Ambiente"],
+        filieraHighlights: ["Distribuzione", "Confezionamento"],
+        insight: "Governance rinforzata, 92% recupero rifiuti"
+    },
+    2024: {
+        vignetoProprio: 95,
+        ettariPartner: 250,
+        valoreGenerato: 59.6,
+        bottiglie: 4.3,
+        paesiServiti: 50,
+        fotovoltaico: 65,
+        rifiutiRecupero: 95,
+        dipendenti: 78,
+        visitatori: 19619,
+        materialitaFocus: ["Ambiente", "Sociale", "Territorio", "Governance"],
+        filieraHighlights: ["Vigneto", "Vendemmia", "Vinificazione", "Confezionamento", "Distribuzione", "Hospitality"],
+        insight: "+32% valore generato dal 2019, 65% energia solare"
+    }
+};
 
+// KPI Definitions for rendering
+const kpiDefinitions = [
+    { key: 'vignetoProprio', label: 'Ettari vigneto proprio', unit: '', format: 'int' },
+    { key: 'ettariPartner', label: 'Ettari partner', unit: '', format: 'int', prefix: 'Rete ' },
+    { key: 'valoreGenerato', label: 'generato', unit: 'M€', format: 'float', prefix: 'Valore ' },
+    { key: 'bottiglie', label: 'bottiglie', unit: 'M', format: 'float', prefix: 'Volume ' },
+    { key: 'paesiServiti', label: 'paesi serviti', unit: '', format: 'int', prefix: 'Export ' },
+    { key: 'fotovoltaico', label: 'fotovoltaico', unit: '%', format: 'int', prefix: 'Energia ' },
+    { key: 'rifiutiRecupero', label: 'rifiuti recupero', unit: '%', format: 'int', prefix: 'Circolarità ' },
+    { key: 'dipendenti', label: 'dipendenti', unit: '', format: 'int', prefix: 'Team ' },
+    { key: 'visitatori', label: 'Visitatori annuali', unit: '', format: 'int', separator: true }
+];
+
+// State Management
+let currentState = {
+    year: 2024,
+    compareMode: false,
+    previousYear: null
+};
+
+// DOM Elements
+const yearSelector = document.getElementById('year-selector');
+const kpiGrid = document.getElementById('kpi-grid');
+const compareToggle = document.getElementById('compare-toggle');
+const compareToggleKnob = document.getElementById('compare-toggle-knob');
+const insightBanner = document.getElementById('insight-banner');
+const insightText = document.getElementById('insight-text');
+const heroYear = document.getElementById('hero-year');
+const heroAnnualita = document.getElementById('hero-annualita');
+const perfYear = document.getElementById('perf-year');
+const filieraYear = document.getElementById('filiera-year');
+const compareHint = document.getElementById('compare-hint');
+const yearsHistory = document.getElementById('years-history');
+
+// Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize all modules
-    initNavigation();
-    initScrollReveals();
-    initKPICounters();
-    initTimelineAnimation();
-    initGovernanceAnimation();
-    initParallax();
-    initSmoothScroll();
-    initMobileMenu();
+    initYearSelector();
+    renderKPIs();
+    updateContent(currentState.year);
+    setupEventListeners();
+    setupIntersectionObserver();
 });
 
-/**
- * NAVIGATION SYSTEM
- * Scroll-spy, header compression, progress indicator
- */
-function initNavigation() {
-    const nav = document.getElementById('main-nav');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('section[id]');
-    const scrollProgress = document.querySelector('.scroll-progress');
+// Year Selector Initialization
+function initYearSelector() {
+    const years = Object.keys(sustainabilityData);
     
-    let lastScroll = 0;
-    let ticking = false;
-    
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                const currentScroll = window.pageYOffset;
-                
-                // Header compression on scroll
-                if (currentScroll > 100) {
-                    nav.classList.add('scrolled');
-                } else {
-                    nav.classList.remove('scrolled');
-                }
-                
-                // Update scroll progress bar
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const progress = (currentScroll / docHeight) * 100;
-                scrollProgress.style.width = `${progress}%`;
-                
-                // Scroll Spy - Active Section Highlight
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop - 200;
-                    const sectionHeight = section.offsetHeight;
-                    const sectionId = section.getAttribute('id');
-                    
-                    if (currentScroll >= sectionTop && currentScroll < sectionTop + sectionHeight) {
-                        navLinks.forEach(link => {
-                            link.classList.remove('active');
-                            if (link.getAttribute('href') === `#${sectionId}`) {
-                                link.classList.add('active');
-                            }
-                        });
-                    }
-                });
-                
-                lastScroll = currentScroll;
-                ticking = false;
-            });
-            ticking = true;
-        }
-    }, { passive: true });
-}
-
-/**
- * SCROLL-DRIVEN REVEALS
- * Intersection Observer with staggered timing
- */
-function initScrollReveals() {
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px 0px -100px 0px',
-        threshold: 0.1
-    };
-    
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                // Add small stagger based on element's delay class or position
-                const delay = entry.target.classList.contains('delay-100') ? 100 :
-                             entry.target.classList.contains('delay-200') ? 200 :
-                             entry.target.classList.contains('delay-300') ? 300 :
-                             entry.target.classList.contains('delay-400') ? 400 :
-                             entry.target.classList.contains('delay-500') ? 500 : 0;
-                
-                setTimeout(() => {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0) translateX(0)';
-                }, delay);
-                
-                // Unobserve after animation
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-    
-    // Observe all reveal elements
-    document.querySelectorAll('.reveal-element').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 700ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 700ms cubic-bezier(0.25, 0.1, 0.25, 1)';
-        revealObserver.observe(el);
+    years.forEach(year => {
+        const btn = document.createElement('button');
+        btn.className = `year-btn px-4 py-2 rounded-full text-sm font-medium text-stone-600 hover:text-red-900 hover:bg-stone-100 whitespace-nowrap ${year == currentState.year ? 'active bg-stone-100' : ''}`;
+        btn.textContent = year;
+        btn.dataset.year = year;
+        btn.onclick = () => handleYearChange(parseInt(year));
+        yearSelector.appendChild(btn);
     });
 }
 
-/**
- * KPI COUNTER ANIMATION
- * Count-up effect triggered on viewport entry
- * Main KPI (59.6M€) has subtle glow pulse
- */
-function initKPICounters() {
-    const kpiSection = document.getElementById('dati');
-    const kpiValues = document.querySelectorAll('.kpi-value');
-    let animated = false;
+// Handle Year Change
+function handleYearChange(year) {
+    if (year === currentState.year) return;
     
-    const countUp = (element, target, duration = 2000, decimals = 0, suffix = '') => {
-        const start = 0;
-        const startTime = performance.now();
+    // Update active state in UI
+    document.querySelectorAll('.year-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-stone-100');
+        if (parseInt(btn.dataset.year) === year) {
+            btn.classList.add('active', 'bg-stone-100');
+        }
+    });
+    
+    // Fade out content
+    const contentElements = document.querySelectorAll('.kpi-card, .materialita-card, .filiera-step');
+    contentElements.forEach(el => el.style.opacity = '0.5');
+    
+    setTimeout(() => {
+        currentState.previousYear = currentState.year;
+        currentState.year = year;
+        updateContent(year);
         
-        const updateCount = (currentTime) => {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            // Refined easing (ease-out-cubic)
-            const easeProgress = 1 - Math.pow(1 - progress, 3);
-            const current = start + (target - start) * easeProgress;
-            
-            if (decimals > 0) {
-                element.textContent = current.toFixed(decimals) + suffix;
-            } else {
-                element.textContent = Math.floor(current) + suffix;
-            }
-            
-            if (progress < 1) {
-                requestAnimationFrame(updateCount);
-            } else {
-                element.textContent = target + suffix;
-            }
-        };
-        
-        requestAnimationFrame(updateCount);
+        // Fade in
+        contentElements.forEach(el => {
+            el.style.opacity = '1';
+            el.classList.add('animate-fade-in');
+        });
+    }, 300);
+}
+
+// Update All Content
+function updateContent(year) {
+    const data = sustainabilityData[year];
+    const baseData = sustainabilityData[2019];
+    
+    // Update text elements
+    heroYear.textContent = year;
+    heroAnnualita.textContent = year;
+    perfYear.textContent = year;
+    filieraYear.textContent = year;
+    yearsHistory.textContent = 63 + (year - 2024); // Dynamic years since 1961
+    
+    // Update insight
+    updateInsight(data, baseData, year);
+    
+    // Update KPIs with animation
+    updateKPIs(data, baseData);
+    
+    // Update Materialità
+    updateMaterialita(data.materialitaFocus);
+    
+    // Update Filiera
+    updateFiliera(year);
+    
+    // Update year labels across page
+    document.querySelectorAll('.current-year-label').forEach(el => {
+        el.textContent = year;
+    });
+}
+
+// Generate Dynamic Insights
+function updateInsight(data, baseData, year) {
+    const changes = {
+        valore: ((data.valoreGenerato - baseData.valoreGenerato) / baseData.valoreGenerato * 100).toFixed(0),
+        energia: ((data.fotovoltaico - baseData.fotovoltaico) / baseData.fotovoltaico * 100).toFixed(0),
+        visitatori: ((data.visitatori - baseData.visitatori) / baseData.visitatori * 100).toFixed(0)
     };
     
-    const kpiObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !animated) {
-                animated = true;
-                
-                // Staggered counter animation for KPIs
-                kpiValues.forEach((kpi, index) => {
-                    const target = parseFloat(kpi.getAttribute('data-target'));
-                    const decimals = parseInt(kpi.getAttribute('data-decimals')) || 0;
-                    const suffix = kpi.getAttribute('data-suffix') || '';
-                    
-                    setTimeout(() => {
-                        countUp(kpi, target, 2500, decimals, suffix);
-                    }, index * 150); // 150ms stagger between cards
-                });
-                
-                kpiObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.3 });
-    
-    if (kpiSection) {
-        kpiObserver.observe(kpiSection);
+    let insight = '';
+    if (year === 2019) {
+        insight = "Anno base di riferimento per l'analisi comparativa";
+    } else if (year === 2020) {
+        insight = "Impatto pandemia: -7% valore generato, riduzione hospitality";
+    } else if (year === 2024) {
+        insight = `+${changes.valore}% valore generato dal 2019, transizione energetica accelerata`;
+    } else {
+        insight = `Crescita costante: +${changes.energia}% energia rinnovabile vs 2019`;
     }
+    
+    insightText.textContent = insight;
+    insightBanner.style.opacity = '1';
 }
 
-/**
- * FILIERA TIMELINE ANIMATION
- * Vertical line draws progressively, markers activate sequentially
- */
-function initTimelineAnimation() {
-    const timelineSection = document.getElementById('filiera');
-    if (!timelineSection) return;
+// Render KPI Grid
+function renderKPIs() {
+    kpiGrid.innerHTML = '';
     
-    // Desktop elements
-    const timelineProgressDesktop = document.getElementById('timeline-progress-desktop');
-    const timelineItemsDesktop = document.querySelectorAll('.timeline-item-desktop');
-    
-    // Mobile elements
-    const timelineProgressMobile = document.getElementById('timeline-progress-mobile');
-    const timelineItemsMobile = document.querySelectorAll('.timeline-item-mobile');
-    
-    let progressAnimated = false;
-    
-    const timelineObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !progressAnimated) {
-                progressAnimated = true;
-                
-                // Animate desktop line
-                if (timelineProgressDesktop) {
-                    setTimeout(() => {
-                        timelineProgressDesktop.style.transform = 'scaleY(1)';
-                    }, 300);
-                }
-                
-                // Animate mobile line
-                if (timelineProgressMobile) {
-                    setTimeout(() => {
-                        timelineProgressMobile.style.transform = 'scaleY(1)';
-                    }, 300);
-                }
-                
-                // Activate desktop items
-                timelineItemsDesktop.forEach((item, index) => {
-                    setTimeout(() => {
-                        item.classList.add('active');
-                        item.style.opacity = '1';
-                        item.style.transform = 'translateY(0)';
-                        
-                        // Activate dot
-                        const dot = item.querySelector('.timeline-dot');
-                        const dotInner = item.querySelector('.timeline-dot-inner');
-                        if (dot) {
-                            dot.style.borderColor = 'var(--color-gold)';
-                            dot.style.transform = 'scale(1.2)';
-                        }
-                        if (dotInner) {
-                            dotInner.style.background = 'var(--color-gold)';
-                            dotInner.style.transform = 'scale(1.5)';
-                        }
-                    }, 500 + (index * 200));
-                });
-                
-                // Activate mobile items
-                timelineItemsMobile.forEach((item, index) => {
-                    setTimeout(() => {
-                        item.classList.add('active');
-                        item.style.opacity = '1';
-                        item.style.transform = 'translateX(0)';
-                        
-                        // Activate dot
-                        const dot = item.querySelector('.timeline-dot-mobile');
-                        const dotInner = item.querySelector('.timeline-dot-inner');
-                        if (dot) {
-                            dot.style.borderColor = 'var(--color-gold)';
-                        }
-                        if (dotInner) {
-                            dotInner.style.background = 'var(--color-gold)';
-                            dotInner.style.transform = 'scale(1.5)';
-                        }
-                    }, 500 + (index * 200));
-                });
-                
-                timelineObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.15 });
-    
-    timelineObserver.observe(timelineSection);
+    kpiDefinitions.forEach((kpi, index) => {
+        const card = document.createElement('div');
+        card.className = `kpi-card bg-white p-6 rounded-2xl border border-stone-200 shadow-sm stagger-${(index % 4) + 1}`;
+        card.innerHTML = `
+            <div class="flex items-start justify-between mb-2">
+                <span class="text-xs font-medium text-stone-500 uppercase tracking-wider">${kpi.prefix || ''}${kpi.label}</span>
+                <span class="delta-indicator hidden text-xs font-bold px-2 py-1 rounded-full"></span>
+            </div>
+            <div class="flex items-baseline gap-1">
+                <span class="text-3xl font-serif text-stone-900 kpi-value" data-key="${kpi.key}" data-format="${kpi.format}">0</span>
+                <span class="text-sm text-stone-500 kpi-unit">${kpi.unit}</span>
+            </div>
+            <div class="mt-3 h-8 w-full opacity-30">
+                <svg class="w-full h-full sparkline" viewBox="0 0 100 20" preserveAspectRatio="none">
+                    <path d="M0,${20 - (index * 2)} Q25,${15 - index} 50,${10 + index} T100,${5 + (index % 3)}" />
+                </svg>
+            </div>
+        `;
+        kpiGrid.appendChild(card);
+    });
 }
 
-/**
- * GOVERNANCE ANIMATION
- * Nodes appear sequentially with connector line animation
- */
-function initGovernanceAnimation() {
-    const governanceSection = document.getElementById('governance');
-    const nodes = document.querySelectorAll('.governance-node');
-    const connector = document.getElementById('governance-connector');
+// Update KPIs with counting animation
+function updateKPIs(data, baseData) {
+    const values = document.querySelectorAll('.kpi-value');
+    const indicators = document.querySelectorAll('.delta-indicator');
     
-    if (!governanceSection) return;
-    
-    const governanceObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Animate connector line first
-                if (connector) {
-                    setTimeout(() => {
-                        connector.style.transform = 'scaleX(1)';
-                    }, 300);
-                }
-                
-                // Stagger node appearances
-                nodes.forEach((node, index) => {
-                    setTimeout(() => {
-                        node.classList.add('active');
-                    }, 500 + (index * 400)); // 400ms between nodes
-                });
-                
-                governanceObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.3 });
-    
-    governanceObserver.observe(governanceSection);
-}
-
-/**
- * LIGHT PARALLAX EFFECT
- * Hero section only, max 5-10px movement
- */
-function initParallax() {
-    const hero = document.getElementById('hero');
-    const heroBg = hero?.querySelector('.hero-bg');
-    
-    if (!hero || !heroBg) return;
-    
-    let ticking = false;
-    
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                const scrolled = window.pageYOffset;
-                const rate = scrolled * 0.02; // Very subtle: 2% of scroll
-                
-                // Cap at 10px max movement
-                const limitedRate = Math.min(Math.max(rate, 0), 10);
-                
-                heroBg.style.transform = `translateY(${limitedRate}px)`;
-                ticking = false;
-            });
-            ticking = true;
+    values.forEach((el, index) => {
+        const key = el.dataset.key;
+        const format = el.dataset.format;
+        const newValue = data[key];
+        const oldValue = currentState.compareMode && currentState.previousYear ? 
+            sustainabilityData[currentState.previousYear][key] : 
+            (baseData ? baseData[key] : newValue);
+        
+        // Animate number
+        animateNumber(el, parseFloat(el.textContent.replace(/,/g, '')), newValue, format);
+        
+        // Update comparison indicator
+        const indicator = indicators[index];
+        if (currentState.compareMode && currentState.year !== 2019) {
+            const diff = newValue - oldValue;
+            const percent = ((diff / oldValue) * 100).toFixed(1);
+            const isPositive = diff >= 0;
+            
+            indicator.classList.remove('hidden', 'delta-positive', 'delta-negative');
+            indicator.classList.add(isPositive ? 'delta-positive' : 'delta-negative');
+            indicator.innerHTML = `
+                <span class="flex items-center gap-1">
+                    <i data-lucide="${isPositive ? 'trending-up' : 'trending-down'}" class="w-3 h-3"></i>
+                    ${isPositive ? '+' : ''}${percent}%
+                </span>
+            `;
+            lucide.createIcons();
+        } else {
+            indicator.classList.add('hidden');
         }
-    }, { passive: true });
+    });
 }
 
-/**
- * SMOOTH SCROLL FOR ANCHOR LINKS
- * Refined scrolling behavior
- */
-function initSmoothScroll() {
+// Number Animation
+function animateNumber(element, start, end, format) {
+    const duration = 800;
+    const startTime = performance.now();
+    
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function (ease-out-quart)
+        const ease = 1 - Math.pow(1 - progress, 4);
+        
+        const current = start + (end - start) * ease;
+        
+        if (format === 'int') {
+            element.textContent = Math.round(current).toLocaleString('it-IT');
+        } else {
+            element.textContent = current.toFixed(1).replace('.', ',');
+        }
+        
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        }
+    }
+    
+    requestAnimationFrame(update);
+}
+
+// Update Materialità Section
+function updateMaterialita(focusAreas) {
+    const container = document.getElementById('materialita-grid');
+    const themes = [
+        { id: 'ambiente', title: 'Ambiente', desc: 'Rende visibili gli impatti collegati al vigneto, ai consumi e alla gestione delle risorse.' },
+        { id: 'sociale', title: 'Sociale', desc: 'Mostra che la sostenibilità riguarda anche condizioni di lavoro e responsabilità verso il consumatore.' },
+        { id: 'territorio', title: 'Territorio', desc: 'Collega sostenibilità, reputazione e radicamento territoriale.' },
+        { id: 'governance', title: 'Governance', desc: 'Rende credibile la sostenibilità come management integrato.' }
+    ];
+    
+    container.innerHTML = themes.map((theme, index) => {
+        const isActive = focusAreas.includes(theme.title);
+        const opacity = isActive ? 'opacity-100' : 'opacity-60';
+        const border = isActive ? 'border-amber-300 bg-amber-50/30' : 'border-stone-200';
+        
+        return `
+            <div class="materialita-card p-6 rounded-xl border ${border} ${opacity} transition-all duration-500">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="font-serif text-3xl ${isActive ? 'text-amber-700' : 'text-stone-400'}">0${index + 1}</span>
+                    ${isActive ? '<i data-lucide="check-circle" class="w-5 h-5 text-amber-700"></i>' : ''}
+                </div>
+                <h3 class="font-serif text-xl text-stone-900 mb-2">${theme.title}</h3>
+                <p class="text-stone-600 text-sm leading-relaxed">${theme.desc}</p>
+                ${isActive ? '<div class="mt-3 text-xs font-medium text-amber-700">Focus anno corrente</div>' : ''}
+            </div>
+        `;
+    }).join('');
+    
+    lucide.createIcons();
+}
+
+// Update Filiera Content
+function updateFiliera(year) {
+    const steps = [
+        { num: '01', title: 'Vigneto e approvvigionamento', desc: 'La base agricola diretta e la relazione con i viticoltori partner.' },
+        { num: '02', title: 'Vendemmia', desc: 'La fase di raccolta collega qualità della materia prima e organizzazione operativa.' },
+        { num: '03', title: 'Vinificazione', desc: 'La trasformazione integra processo produttivo e attenzione alle risorse.' },
+        { num: '04', title: 'Confezionamento', desc: 'Materiali, gestione degli scarti e logiche di circolarità.' },
+        { num: '05', title: 'Distribuzione', desc: 'Presenza internazionale e responsabilità commerciale.' },
+        { num: '06', title: 'Hospitality', desc: 'Il rapporto con visitatori e territorio oltre la bottiglia.' }
+    ];
+    
+    const container = document.getElementById('filiera-steps');
+    const yearProgress = (year - 2019) / 5; // 0 to 1
+    
+    container.innerHTML = steps.map((step, index) => {
+        const isHighlighted = index < (yearProgress * 6); // Progressive revelation
+        const activeClass = isHighlighted ? 'active border-l-2 border-amber-700 pl-4' : 'border-l-2 border-stone-200 pl-4';
+        
+        return `
+            <div class="filiera-step ${activeClass} cursor-pointer" onclick="highlightStep(this)">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="font-serif text-sm ${isHighlighted ? 'text-amber-700' : 'text-stone-400'}">Fase ${step.num}</span>
+                    <div class="h-px flex-1 ${isHighlighted ? 'bg-amber-200' : 'bg-stone-200'}"></div>
+                </div>
+                <h3 class="font-serif text-xl text-stone-900 mb-2">${step.title}</h3>
+                <p class="text-stone-600 text-sm leading-relaxed">${step.desc}</p>
+            </div>
+        `;
+    }).join('');
+}
+
+// Step Highlight Interaction
+function highlightStep(element) {
+    document.querySelectorAll('.filiera-step').forEach(el => {
+        el.classList.remove('active', 'border-amber-700');
+        el.classList.add('border-stone-200');
+    });
+    element.classList.add('active', 'border-amber-700');
+    element.classList.remove('border-stone-200');
+}
+
+// Event Listeners
+function setupEventListeners() {
+    // Comparison Toggle
+    compareToggle.addEventListener('click', () => {
+        currentState.compareMode = !currentState.compareMode;
+        compareToggle.classList.toggle('active');
+        
+        if (currentState.compareMode) {
+            compareHint.classList.remove('hidden');
+            compareHint.classList.add('animate-fade-in');
+        } else {
+            compareHint.classList.add('hidden');
+        }
+        
+        updateKPIs(sustainabilityData[currentState.year], sustainabilityData[2019]);
+    });
+    
+    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
-            
             if (target) {
-                const headerOffset = 80;
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-                
-                // Close mobile menu if open
-                const mobileMenu = document.getElementById('mobile-menu');
-                if (mobileMenu && mobileMenu.classList.contains('open')) {
-                    mobileMenu.classList.remove('open');
-                }
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         });
     });
 }
 
-/**
- * MOBILE MENU
- * Clean, minimal hamburger functionality
- */
-function initMobileMenu() {
-    const menuBtn = document.getElementById('mobile-menu-btn');
-    const closeBtn = document.getElementById('close-menu');
-    const mobileMenu = document.getElementById('mobile-menu');
-    
-    if (!menuBtn || !mobileMenu) return;
-    
-    menuBtn.addEventListener('click', () => {
-        mobileMenu.classList.add('open');
-        document.body.style.overflow = 'hidden';
+// Intersection Observer for Scroll Animations
+function setupIntersectionObserver() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-fade-in');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     });
     
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            document.body.style.overflow = '';
-        });
-    }
-    
-    // Close on escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileMenu.classList.contains('open')) {
-            mobileMenu.classList.remove('open');
-            document.body.style.overflow = '';
-        }
+    document.querySelectorAll('.kpi-card, .materialita-card, .filiera-step').forEach(el => {
+        observer.observe(el);
     });
 }
 
-/**
-     * MICRO-INTERACTIONS ENHANCEMENT
-     * Additional subtle hover states via JS for performance
-     */
-    document.querySelectorAll('.path-card, .material-card').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transition = 'all 500ms cubic-bezier(0.25, 0.1, 0.25, 1)';
-        });
-    });
+// Sticky Year Navigation behavior
+let lastScroll = 0;
+const yearNav = document.getElementById('year-nav');
 
-    // KPI Card subtle glow effect on hover
-    document.querySelectorAll('.kpi-card').forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.boxShadow = '0 0 30px rgba(201, 169, 97, 0.15)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.boxShadow = '';
-        });
-    });
+window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    if (currentScroll > lastScroll && currentScroll > 100) {
+        yearNav.style.transform = 'translateY(-100%)';
+    } else {
+        yearNav.style.transform = 'translateY(0)';
+    }
+    
+    lastScroll = currentScroll;
+});
