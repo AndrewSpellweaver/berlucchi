@@ -86,18 +86,56 @@ const sustainabilityData = {
     }
 };
 
-// KPI Definitions for rendering
+// KPI Definitions with hierarchy and directional meaning
 const kpiDefinitions = [
-    { key: 'vignetoProprio', label: 'Ettari vigneto proprio', unit: '', format: 'int' },
-    { key: 'ettariPartner', label: 'Ettari partner', unit: '', format: 'int', prefix: 'Rete ' },
-    { key: 'valoreGenerato', label: 'generato', unit: 'M€', format: 'float', prefix: 'Valore ' },
-    { key: 'bottiglie', label: 'bottiglie', unit: 'M', format: 'float', prefix: 'Volume ' },
-    { key: 'paesiServiti', label: 'paesi serviti', unit: '', format: 'int', prefix: 'Export ' },
-    { key: 'fotovoltaico', label: 'fotovoltaico', unit: '%', format: 'int', prefix: 'Energia ' },
-    { key: 'rifiutiRecupero', label: 'rifiuti recupero', unit: '%', format: 'int', prefix: 'Circolarità ' },
-    { key: 'dipendenti', label: 'dipendenti', unit: '', format: 'int', prefix: 'Team ' },
-    { key: 'visitatori', label: 'Visitatori annuali', unit: '', format: 'int', separator: true }
+    { key: 'valoreGenerato', label: 'generato', unit: 'M€', format: 'float', prefix: 'Valore ', hero: true, microLabel: 'crescita costante' },
+    { key: 'fotovoltaico', label: 'fotovoltaico', unit: '%', format: 'int', prefix: 'Energia ', hero: true, microLabel: 'transizione energetica' },
+    { key: 'vignetoProprio', label: 'Ettari vigneto proprio', unit: '', format: 'int', microLabel: 'espansione patrimoniale' },
+    { key: 'ettariPartner', label: 'Ettari partner', unit: '', format: 'int', prefix: 'Rete ', microLabel: 'consolidamento filiera' },
+    { key: 'bottiglie', label: 'bottiglie', unit: 'M', format: 'float', prefix: 'Volume ', microLabel: 'crescita volumetrica' },
+    { key: 'paesiServiti', label: 'paesi serviti', unit: '', format: 'int', prefix: 'Export ', microLabel: 'espansione internazionale' },
+    { key: 'rifiutiRecupero', label: 'rifiuti recupero', unit: '%', format: 'int', prefix: 'Circolarità ', environmental: true, microLabel: 'economia circolare' },
+    { key: 'dipendenti', label: 'dipendenti', unit: '', format: 'int', prefix: 'Team ', microLabel: 'sviluppo organizzativo' },
+    { key: 'visitatori', label: 'Visitatori annuali', unit: '', format: 'int', separator: true, microLabel: 'rilancio hospitality' }
 ];
+
+// Interpretive insights by year (not descriptive)
+const interpretiveInsights = {
+    2019: [
+        "L'anno della definizione degli standard ESG: posizionamento strategico per la misurazione futura.",
+        "Baseline stabilita: 80 ettari, 65 dipendenti, 20% energia rinnovabile come punto di partenza."
+    ],
+    2020: [
+        "Resilienza testata: la sostenibilità come ancoraggio in un anno di contrazione globale.",
+        "Contrazione del -7% compensata da accelerazione energetica (+40% fotovoltaico)."
+    ],
+    2021: [
+        "Ripresa guidata dal territorio: l'hospitality ritorna con focus su relazione locale.",
+        "Espansione della rete partner a 215 ettari: consolidamento della filiera corta."
+    ],
+    2022: [
+        "Svolta internazionale: esportazione in 45 paesi guida la crescita del valore generato.",
+        "Innovazione agronomica: PBVS e sperimentazione rendono la sostenibilità campo di apprendimento."
+    ],
+    2023: [
+        "Governance matura: il comitato strategico rende la sostenibilità struttura decisionale.",
+        "Circolarità quasi totale: 92% di recupero rifiuti segna l'adozione di economia circolare."
+    ],
+    2024: [
+        "Trasformazione compiuta: +32% valore generato dal 2019 attraverso espansione internazionale.",
+        "Energia come identità: 65% da fonti rinnovabili rende Berlucchi esempio di transizione energetica nel settore."
+    ]
+};
+
+// Hero taglines by year
+const heroTaglines = {
+    2019: "L'inizio del percorso misurato: definizione degli standard ESG.",
+    2020: "Resilienza e adaptability: la sostenibilità come ancora nella tempesta.",
+    2021: "Ripartenza territoriale: l'hospitality riscopre le radici locali.",
+    2022: "Espansione internazionale: la sostenibilità accompagna la crescita globale.",
+    2023: "Governance matura: la sostenibilità diventa struttura decisionale.",
+    2024: "Trasformazione compiuta: sei anni di evoluzione responsabile."
+};
 
 // State Management
 let currentState = {
@@ -127,6 +165,10 @@ document.addEventListener('DOMContentLoaded', () => {
     updateContent(currentState.year);
     setupEventListeners();
     setupIntersectionObserver();
+    
+    // Set initial temporal progress
+    const progressPercent = ((currentState.year - 2019) / 5) * 100;
+    document.getElementById('temporal-progress').style.width = `${progressPercent}%`;
 });
 
 // Year Selector Initialization
@@ -143,7 +185,7 @@ function initYearSelector() {
     });
 }
 
-// Handle Year Change
+// Handle Year Change with Temporal Transitions
 function handleYearChange(year) {
     if (year === currentState.year) return;
     
@@ -155,21 +197,45 @@ function handleYearChange(year) {
         }
     });
     
-    // Fade out content
-    const contentElements = document.querySelectorAll('.kpi-card, .materialita-card, .filiera-step');
-    contentElements.forEach(el => el.style.opacity = '0.5');
+    // Apply temporal blur effect
+    const kpiCards = document.querySelectorAll('.kpi-card');
+    const perfSection = document.getElementById('performance');
+    
+    kpiCards.forEach(card => {
+        card.classList.add('temporal-blur');
+        card.classList.remove('temporal-focus');
+    });
+    
+    // Animate hero year with flip effect
+    const heroYearEl = document.getElementById('hero-year');
+    heroYearEl.style.transform = 'rotateX(90deg)';
+    heroYearEl.style.opacity = '0';
+    
+    // Update temporal progress indicator
+    const progressPercent = ((year - 2019) / 5) * 100;
+    document.getElementById('temporal-progress').style.width = `${progressPercent}%`;
+    document.getElementById('years-elapsed').textContent = `${year - 2019} anni di evoluzione`;
     
     setTimeout(() => {
         currentState.previousYear = currentState.year;
         currentState.year = year;
         updateContent(year);
         
-        // Fade in
-        contentElements.forEach(el => {
-            el.style.opacity = '1';
-            el.classList.add('animate-fade-in');
+        // Restore with focus effect
+        kpiCards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.remove('temporal-blur');
+                card.classList.add('temporal-focus');
+            }, index * 50); // Staggered re-entry
         });
-    }, 300);
+        
+        // Restore hero year
+        heroYearEl.textContent = year;
+        heroYearEl.style.transform = 'rotateX(0deg)';
+        heroYearEl.style.opacity = '1';
+        heroYearEl.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+        
+    }, 400);
 }
 
 // Update All Content
@@ -202,45 +268,91 @@ function updateContent(year) {
     });
 }
 
-// Generate Dynamic Insights
+// Generate Interpretive Insights (Editorial Commentary)
 function updateInsight(data, baseData, year) {
-    const changes = {
-        valore: ((data.valoreGenerato - baseData.valoreGenerato) / baseData.valoreGenerato * 100).toFixed(0),
-        energia: ((data.fotovoltaico - baseData.fotovoltaico) / baseData.fotovoltaico * 100).toFixed(0),
-        visitatori: ((data.visitatori - baseData.visitatori) / baseData.visitatori * 100).toFixed(0)
-    };
+    const insights = interpretiveInsights[year] || interpretiveInsights[2024];
+    const randomInsight = insights[Math.floor(Math.random() * insights.length)];
     
-    let insight = '';
-    if (year === 2019) {
-        insight = "Anno base di riferimento per l'analisi comparativa";
-    } else if (year === 2020) {
-        insight = "Impatto pandemia: -7% valore generato, riduzione hospitality";
-    } else if (year === 2024) {
-        insight = `+${changes.valore}% valore generato dal 2019, transizione energetica accelerata`;
-    } else {
-        insight = `Crescita costante: +${changes.energia}% energia rinnovabile vs 2019`;
+    // Animate out
+    insightBanner.style.opacity = '0';
+    insightBanner.style.transform = 'translateY(10px)';
+    
+    setTimeout(() => {
+        insightText.textContent = randomInsight;
+        
+        // Rotate insights every 5 seconds if multiple available
+        if (insights.length > 1 && window.insightInterval) {
+            clearInterval(window.insightInterval);
+        }
+        
+        if (insights.length > 1) {
+            let insightIndex = 0;
+            window.insightInterval = setInterval(() => {
+                insightIndex = (insightIndex + 1) % insights.length;
+                insightBanner.style.opacity = '0';
+                setTimeout(() => {
+                    insightText.textContent = insights[insightIndex];
+                    insightBanner.style.opacity = '1';
+                    insightBanner.style.transform = 'translateY(0)';
+                }, 300);
+            }, 6000);
+        }
+        
+        // Animate in
+        insightBanner.style.opacity = '1';
+        insightBanner.style.transform = 'translateY(0)';
+        
+        // Update meta line
+        const metaLine = document.getElementById('insight-meta');
+        if (year === 2019) {
+            metaLine.textContent = 'Anno base';
+        } else {
+            const yearsDelta = year - 2019;
+            metaLine.textContent = `Analisi comparativa ${yearsDelta} anni • vs 2019`;
+        }
+    }, 300);
+    
+    // Update hero tagline
+    const tagline = document.getElementById('hero-tagline');
+    if (tagline && heroTaglines[year]) {
+        tagline.style.opacity = '0';
+        setTimeout(() => {
+            tagline.textContent = heroTaglines[year];
+            tagline.style.opacity = '1';
+        }, 300);
     }
-    
-    insightText.textContent = insight;
-    insightBanner.style.opacity = '1';
 }
 
-// Render KPI Grid
+// Render KPI Grid with Hierarchy and Ghost Values
 function renderKPIs() {
     kpiGrid.innerHTML = '';
     
     kpiDefinitions.forEach((kpi, index) => {
+        const isHero = kpi.hero ? 'kpi-hero md:col-span-2' : '';
+        const isEnvironmental = kpi.environmental ? 'kpi-environmental' : '';
+        const progressPercent = ((currentState.year - 2019) / 5) * 100;
+        
         const card = document.createElement('div');
-        card.className = `kpi-card bg-white p-6 rounded-2xl border border-stone-200 shadow-sm stagger-${(index % 4) + 1}`;
+        card.className = `kpi-card ${isHero} ${isEnvironmental} bg-white p-6 rounded-2xl border border-stone-200 shadow-sm stagger-${(index % 4) + 1}`;
+        
+        // Calculate ghost value (2019 baseline)
+        const baseValue = sustainabilityData[2019][kpi.key];
+        const ghostDisplay = kpi.format === 'int' ? 
+            Math.round(baseValue).toLocaleString('it-IT') : 
+            baseValue.toFixed(1).replace('.', ',');
+        
         card.innerHTML = `
-            <div class="flex items-start justify-between mb-2">
+            <div class="flex items-start justify-between mb-2 relative">
                 <span class="text-xs font-medium text-stone-500 uppercase tracking-wider">${kpi.prefix || ''}${kpi.label}</span>
                 <span class="delta-indicator hidden text-xs font-bold px-2 py-1 rounded-full"></span>
+                ${currentState.compareMode ? `<span class="ghost-value">2019: ${ghostDisplay}</span>` : ''}
             </div>
-            <div class="flex items-baseline gap-1">
-                <span class="text-3xl font-serif text-stone-900 kpi-value" data-key="${kpi.key}" data-format="${kpi.format}">0</span>
+            <div class="flex items-baseline gap-1 relative">
+                <span class="text-3xl font-serif text-stone-900 kpi-value ${kpi.hero ? 'text-5xl' : ''}" data-key="${kpi.key}" data-format="${kpi.format}" data-micro-label="${kpi.microLabel || ''}">0</span>
                 <span class="text-sm text-stone-500 kpi-unit">${kpi.unit}</span>
             </div>
+            <div class="micro-label">${kpi.microLabel || ''}</div>
+            <div class="mini-timeline" style="--progress-start: 0%; --progress-end: ${progressPercent}%"></div>
             <div class="mt-3 h-8 w-full opacity-30">
                 <svg class="w-full h-full sparkline" viewBox="0 0 100 20" preserveAspectRatio="none">
                     <path d="M0,${20 - (index * 2)} Q25,${15 - index} 50,${10 + index} T100,${5 + (index % 3)}" />
@@ -251,54 +363,115 @@ function renderKPIs() {
     });
 }
 
-// Update KPIs with counting animation
+// Update KPIs with Ghost Values and Enhanced Comparison
 function updateKPIs(data, baseData) {
-    const values = document.querySelectorAll('.kpi-value');
-    const indicators = document.querySelectorAll('.delta-indicator');
+    const cards = document.querySelectorAll('.kpi-card');
+    const baseLineData = sustainabilityData[2019];
     
-    values.forEach((el, index) => {
-        const key = el.dataset.key;
-        const format = el.dataset.format;
+    cards.forEach((card, index) => {
+        const valueEl = card.querySelector('.kpi-value');
+        const indicator = card.querySelector('.delta-indicator');
+        const ghostEl = card.querySelector('.ghost-value');
+        const microLabel = card.querySelector('.micro-label');
+        
+        const key = valueEl.dataset.key;
+        const format = valueEl.dataset.format;
         const newValue = data[key];
-        const oldValue = currentState.compareMode && currentState.previousYear ? 
-            sustainabilityData[currentState.previousYear][key] : 
-            (baseData ? baseData[key] : newValue);
+        const baseValue = baseLineData[key];
         
-        // Animate number
-        animateNumber(el, parseFloat(el.textContent.replace(/,/g, '')), newValue, format);
-        
-        // Update comparison indicator
-        const indicator = indicators[index];
+        // Update ghost value visibility based on comparison mode
         if (currentState.compareMode && currentState.year !== 2019) {
-            const diff = newValue - oldValue;
-            const percent = ((diff / oldValue) * 100).toFixed(1);
+            if (!ghostEl) {
+                const ghost = document.createElement('span');
+                ghost.className = 'ghost-value';
+                ghost.textContent = `2019: ${format === 'int' ? 
+                    Math.round(baseValue).toLocaleString('it-IT') : 
+                    baseValue.toFixed(1).replace('.', ',')}`;
+                card.querySelector('.flex.items-start').appendChild(ghost);
+            } else {
+                ghostEl.style.opacity = '1';
+            }
+            
+            // Show connector line for hero KPIs
+            if (kpiDefinitions[index].hero) {
+                card.style.borderLeftWidth = '4px';
+                card.style.borderLeftColor = '#b45309';
+            }
+        } else if (ghostEl) {
+            ghostEl.style.opacity = '0';
+        }
+        
+        // Animate number from zero (re-measurement effect)
+        animateNumber(valueEl, 0, newValue, format, 1000); // Slower, more dramatic
+        
+        // Update directional micro-label
+        if (microLabel && valueEl.dataset.microLabel) {
+            const diff = newValue - baseValue;
+            const percent = ((diff / baseValue) * 100).toFixed(0);
+            
+            if (currentState.year === 2019) {
+                microLabel.textContent = 'anno base';
+            } else if (percent > 30) {
+                microLabel.textContent = `trasformazione significativa (+${percent}%)`;
+            } else if (percent > 10) {
+                microLabel.textContent = `crescita solida (+${percent}%)`;
+            } else if (percent > 0) {
+                microLabel.textContent = `evoluzione graduale (+${percent}%)`;
+            } else {
+                microLabel.textContent = 'stabilizzazione';
+            }
+        }
+        
+        // Update comparison indicator with interpretive styling
+        if (currentState.compareMode && currentState.year !== 2019) {
+            const diff = newValue - baseValue;
+            const percent = ((diff / baseValue) * 100).toFixed(1);
             const isPositive = diff >= 0;
             
-            indicator.classList.remove('hidden', 'delta-positive', 'delta-negative');
-            indicator.classList.add(isPositive ? 'delta-positive' : 'delta-negative');
+            indicator.classList.remove('hidden');
+            indicator.className = `delta-indicator inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${isPositive ? 'bg-amber-100 text-amber-800' : 'bg-stone-200 text-stone-600'}`;
             indicator.innerHTML = `
-                <span class="flex items-center gap-1">
-                    <i data-lucide="${isPositive ? 'trending-up' : 'trending-down'}" class="w-3 h-3"></i>
-                    ${isPositive ? '+' : ''}${percent}%
-                </span>
+                <i data-lucide="${isPositive ? 'arrow-up-right' : 'minus'}" class="w-3 h-3"></i>
+                ${isPositive ? '+' : ''}${percent}%
             `;
+            
+            // Add directional meaning based on magnitude
+            if (percent > 20) {
+                indicator.innerHTML += ` <span class="text-[10px] opacity-70 ml-1">strutturale</span>`;
+            }
+            
             lucide.createIcons();
-        } else {
+        } else if (indicator) {
             indicator.classList.add('hidden');
+        }
+        
+        // Update mini timeline progress
+        const miniTimeline = card.querySelector('.mini-timeline');
+        if (miniTimeline) {
+            const progress = ((currentState.year - 2019) / 5) * 100;
+            miniTimeline.style.setProperty('--progress-end', `${progress}%`);
         }
     });
 }
 
-// Number Animation
-function animateNumber(element, start, end, format) {
-    const duration = 800;
+// Enhanced Number Animation with Re-measurement Effect
+function animateNumber(element, start, end, format, customDuration = 800) {
+    const duration = customDuration;
     const startTime = performance.now();
+    
+    // Add a slight scale pulse at start
+    element.style.transform = 'scale(0.95)';
+    element.style.transition = 'transform 0.2s ease';
+    
+    setTimeout(() => {
+        element.style.transform = 'scale(1)';
+    }, 200);
     
     function update(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         
-        // Easing function (ease-out-quart)
+        // Easing function (ease-out-quart) with slight overshoot for emphasis
         const ease = 1 - Math.pow(1 - progress, 4);
         
         const current = start + (end - start) * ease;
@@ -311,6 +484,12 @@ function animateNumber(element, start, end, format) {
         
         if (progress < 1) {
             requestAnimationFrame(update);
+        } else {
+            // Final pulse when complete
+            element.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                element.style.transform = 'scale(1)';
+            }, 150);
         }
     }
     
@@ -391,18 +570,58 @@ function highlightStep(element) {
 
 // Event Listeners
 function setupEventListeners() {
-    // Comparison Toggle
+    // Comparison Toggle with Enhanced Visual States
     compareToggle.addEventListener('click', () => {
         currentState.compareMode = !currentState.compareMode;
         compareToggle.classList.toggle('active');
         
+        const perfSection = document.getElementById('performance');
+        const kpiGrid = document.getElementById('kpi-grid');
+        
         if (currentState.compareMode) {
+            // Activate comparison visual states
+            perfSection.classList.add('comparison-active-section');
+            kpiGrid.classList.add('comparison-active');
             compareHint.classList.remove('hidden');
             compareHint.classList.add('animate-fade-in');
+            
+            // Add ghost values to all cards
+            document.querySelectorAll('.kpi-card').forEach(card => {
+                const key = card.querySelector('.kpi-value').dataset.key;
+                const format = card.querySelector('.kpi-value').dataset.format;
+                const baseValue = sustainabilityData[2019][key];
+                
+                if (!card.querySelector('.ghost-value')) {
+                    const ghost = document.createElement('span');
+                    ghost.className = 'ghost-value';
+                    ghost.textContent = `2019: ${format === 'int' ? 
+                        Math.round(baseValue).toLocaleString('it-IT') : 
+                        baseValue.toFixed(1).replace('.', ',')}`;
+                    card.querySelector('.flex.items-start').appendChild(ghost);
+                    
+                    // Fade in ghost
+                    setTimeout(() => {
+                        ghost.style.opacity = '1';
+                    }, 50);
+                }
+            });
+            
         } else {
+            // Deactivate comparison visual states
+            perfSection.classList.remove('comparison-active-section');
+            kpiGrid.classList.remove('comparison-active');
             compareHint.classList.add('hidden');
+            
+            // Remove ghost values
+            document.querySelectorAll('.ghost-value').forEach(ghost => {
+                ghost.style.opacity = '0';
+                setTimeout(() => {
+                    ghost.remove();
+                }, 300);
+            });
         }
         
+        // Re-render KPIs with comparison state
         updateKPIs(sustainabilityData[currentState.year], sustainabilityData[2019]);
     });
     
