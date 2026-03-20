@@ -1,1013 +1,464 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sostenibilità Berlucchi | Report 2024</title>
-    
-    <!-- Tailwind CSS -->
+    <title>Berlucchi | Sustainability Intelligence 2019-2024</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-    
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-cream text-charcoal antialiased overflow-x-hidden">
-
-    <!-- Atmospheric Noise Overlay -->
-    <div class="noise-overlay fixed inset-0 pointer-events-none z-50 opacity-[0.03]"></div>
+<body class="bg-stone-50 text-stone-900 font-sans antialiased selection:bg-amber-200 selection:text-amber-900">
 
     <!-- Navigation -->
-    <header id="main-nav" class="fixed top-0 left-0 right-0 z-40 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
-        <div class="nav-inner mx-auto px-6 lg:px-12 py-6 flex justify-between items-center transition-all duration-500">
-            <div class="logo flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-gold flex items-center justify-center">
-                    <span class="text-white font-serif text-xs font-medium">B</span>
+    <nav class="fixed top-0 w-full z-50 bg-stone-50/90 backdrop-blur-md border-b border-stone-200 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-red-950 rounded-full flex items-center justify-center text-stone-50 font-serif text-xl font-bold">B</div>
+                    <span class="font-serif text-2xl tracking-tight text-red-950">Berlucchi</span>
                 </div>
-                <span class="font-serif text-lg tracking-wide text-white nav-text">Berlucchi</span>
+                
+                <div class="hidden md:flex items-center gap-8 text-sm tracking-wide">
+                    <a href="#identita" class="text-stone-600 hover:text-red-900 transition-colors">Identità</a>
+                    <a href="#performance" class="text-stone-600 hover:text-red-900 transition-colors">Performance</a>
+                    <a href="#filiera" class="text-stone-600 hover:text-red-900 transition-colors">Filiera</a>
+                    <a href="#governance" class="text-stone-600 hover:text-red-900 transition-colors">Governance</a>
+                    <a href="#archivio" class="text-stone-600 hover:text-red-900 transition-colors">Archivio</a>
+                </div>
+
+                <button class="md:hidden" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                    <i data-lucide="menu" class="w-6 h-6 text-stone-800"></i>
+                </button>
             </div>
-            
-            <!-- Desktop Navigation -->
-            <nav class="hidden md:flex items-center gap-8">
-                <a href="#identita" class="nav-link text-sm tracking-wide text-white/90 hover:text-white transition-colors relative group">
-                    Identità
-                    <span class="absolute -bottom-1 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a href="#dati" class="nav-link text-sm tracking-wide text-white/90 hover:text-white transition-colors relative group">
-                    Dati
-                    <span class="absolute -bottom-1 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a href="#filiera" class="nav-link text-sm tracking-wide text-white/90 hover:text-white transition-colors relative group">
-                    Filiera
-                    <span class="absolute -bottom-1 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a href="#governance" class="nav-link text-sm tracking-wide text-white/90 hover:text-white transition-colors relative group">
-                    Governance
-                    <span class="absolute -bottom-1 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full"></span>
-                </a>
-                <a href="#archivio" class="nav-link px-5 py-2 border border-white/30 rounded-full text-sm text-white hover:bg-white hover:text-green-dark transition-all duration-300">
-                    Report 2024
-                </a>
-            </nav>
-
-            <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-white p-2">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
         </div>
         
-        <!-- Scroll Progress Indicator -->
-        <div class="scroll-progress absolute bottom-0 left-0 h-[2px] bg-gold/50 w-0 transition-all duration-100"></div>
-    </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-green-dark/95 z-50 opacity-0 pointer-events-none transition-opacity duration-500 flex flex-col items-center justify-center gap-8">
-        <button id="close-menu" class="absolute top-6 right-6 text-white p-2">
-            <i data-lucide="x" class="w-6 h-6"></i>
-        </button>
-        <a href="#identita" class="mobile-nav-link text-2xl font-serif text-white/90 hover:text-gold transition-colors">Identità</a>
-        <a href="#dati" class="mobile-nav-link text-2xl font-serif text-white/90 hover:text-gold transition-colors">Dati</a>
-        <a href="#filiera" class="mobile-nav-link text-2xl font-serif text-white/90 hover:text-gold transition-colors">Filiera</a>
-        <a href="#governance" class="mobile-nav-link text-2xl font-serif text-white/90 hover:text-gold transition-colors">Governance</a>
-        <a href="#archivio" class="mobile-nav-link text-2xl font-serif text-white/90 hover:text-gold transition-colors">Archivio</a>
-    </div>
-
-    <!-- Hero Section - Editorial Cover Quality -->
-    <section id="hero" class="relative min-h-screen flex items-end pb-24 overflow-hidden bg-green-dark">
-        <!-- Background Image with Editorial Treatment -->
-        <div class="hero-bg absolute inset-0">
-            <img src="http://static.photos/vineyard/1200x630/88" alt="Vigneto Franciacorta al tramonto" class="w-full h-full object-cover scale-105 hero-image-editorial">
-            <!-- Multi-layer atmospheric overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-green-dark via-green-dark/40 to-transparent opacity-95"></div>
-            <div class="absolute inset-0 bg-gradient-to-br from-green-dark/70 via-transparent to-green-dark/30"></div>
-            <!-- Refined vignette for depth -->
-            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(27,58,47,0.6)_70%,rgba(27,58,47,0.9)_100%)]"></div>
-            <!-- Warm color grade overlay -->
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(201,169,97,0.08),transparent_50%)]"></div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-100 border-t border-stone-200">
+            <div class="px-6 py-4 space-y-3">
+                <a href="#identita" class="block text-stone-600 hover:text-red-900">Identità</a>
+                <a href="#performance" class="block text-stone-600 hover:text-red-900">Performance</a>
+                <a href="#filiera" class="block text-stone-600 hover:text-red-900">Filiera</a>
+                <a href="#governance" class="block text-stone-600 hover:text-red-900">Governance</a>
+                <a href="#archivio" class="block text-stone-600 hover:text-red-900">Archivio</a>
+            </div>
         </div>
-        
-        <!-- Decorative Gold Line -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-gold/50 to-transparent z-20"></div>
-        
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12">
-            <div class="grid md:grid-cols-12 gap-8 items-end">
-                <!-- Left Column - Main Title -->
-                <div class="md:col-span-8">
-                    <div class="reveal-element opacity-0 translate-y-8 transition-all duration-1000 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
-                        <p class="text-gold/90 text-xs tracking-[0.3em] uppercase mb-6 font-medium flex items-center gap-3">
-                            <span class="w-8 h-px bg-gold/60"></span>
-                            Report di Sostenibilità 2024
-                        </p>
-                    </div>
-                    
-                    <div class="reveal-element opacity-0 translate-y-8 transition-all duration-1000 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-150">
-                        <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-white leading-[0.9] mb-8">
-                            La sostenibilità<br>
-                            <span class="text-gold italic font-light">Berlucchi</span>
-                        </h1>
-                    </div>
-                    
-                    <div class="reveal-element opacity-0 translate-y-8 transition-all duration-1000 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-300">
-                        <p class="text-white/70 text-lg md:text-xl max-w-xl leading-relaxed font-light border-l-2 border-gold/40 pl-6">
-                            Resa leggibile. Un'interfaccia di trasparenza che traduce il report in esperienza narrativa.
-                        </p>
+    </nav>
+
+    <!-- Year Timeline Navigation -->
+    <div class="fixed top-20 w-full z-40 bg-stone-50/95 backdrop-blur-sm border-b border-stone-200 shadow-sm transition-transform duration-300" id="year-nav">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-4 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+                    <span class="text-xs font-medium text-stone-400 uppercase tracking-widest whitespace-nowrap">Anno:</span>
+                    <div class="flex gap-2" id="year-selector">
+                        <!-- Generated by JS -->
                     </div>
                 </div>
                 
-                <!-- Right Column - Meta Info -->
-                <div class="md:col-span-4 md:text-right">
-                    <div class="reveal-element opacity-0 translate-y-8 transition-all duration-1000 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-500 space-y-4">
-                        <div class="md:border-r md:border-gold/30 md:pr-6">
-                            <div class="text-gold font-serif text-3xl mb-1">2024</div>
-                            <div class="text-white/50 text-xs tracking-wider uppercase">Annualità</div>
-                        </div>
-                        <div class="md:border-r md:border-gold/30 md:pr-6">
-                            <div class="text-white/80 font-serif text-lg">Franciacorta</div>
-                            <div class="text-white/50 text-xs tracking-wider uppercase">Lombardia</div>
-                        </div>
-                        <div class="md:border-r md:border-gold/30 md:pr-6">
-                            <div class="text-white/80 font-serif text-lg">Dal 1961</div>
-                            <div class="text-white/50 text-xs tracking-wider uppercase">Tradizione</div>
-                        </div>
-                    </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs text-stone-500">Confronta evoluzione</span>
+                    <button id="compare-toggle" class="relative inline-flex h-6 w-11 items-center rounded-full bg-stone-300 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-red-900 focus:ring-offset-2">
+                        <span class="sr-only">Confronta con anni precedenti</span>
+                        <span id="compare-toggle-knob" class="inline-block h-4 w-4 transform rounded-full bg-white transition duration-300 translate-x-1 shadow-sm"></span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Dynamic Insight Banner -->
+            <div id="insight-banner" class="mt-3 flex items-center gap-2 text-sm text-amber-800 opacity-0 transition-opacity duration-500">
+                <i data-lucide="trending-up" class="w-4 h-4"></i>
+                <span id="insight-text" class="font-medium"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden pt-32">
+        <div class="absolute inset-0 z-0">
+            <img src="http://static.photos/vineyard/1200x630/88" alt="Vigneto Franciacorta" class="w-full h-full object-cover opacity-90">
+            <div class="absolute inset-0 bg-gradient-to-b from-stone-50/30 via-stone-900/20 to-stone-50/90"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+            <div class="mb-6 inline-block">
+                <span class="px-4 py-2 rounded-full bg-white/80 backdrop-blur text-xs font-semibold tracking-widest text-red-900 uppercase border border-red-100 shadow-sm">
+                    Report di Sostenibilità <span id="hero-year">2024</span>
+                </span>
+            </div>
+            <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-stone-900 mb-6 leading-tight tracking-tight">
+                La sostenibilità<br>
+                <span class="italic text-red-950">Berlucchi</span>
+            </h1>
+            <p class="text-lg md:text-xl text-stone-700 max-w-2xl mx-auto leading-relaxed font-light">
+                Resa leggibile. Un'interfaccia di trasparenza che traduce il report in esperienza narrativa evolutiva.
+            </p>
+            
+            <div class="mt-12 flex flex-wrap justify-center gap-8 text-sm tracking-wide">
+                <div class="text-center">
+                    <div class="font-serif text-2xl text-red-900" id="hero-annualita">2024</div>
+                    <div class="text-stone-500 uppercase text-xs mt-1">Annualità</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-serif text-2xl text-red-900">Franciacorta</div>
+                    <div class="text-stone-500 uppercase text-xs mt-1">Lombardia</div>
+                </div>
+                <div class="text-center">
+                    <div class="font-serif text-2xl text-red-900">Dal 1961</div>
+                    <div class="text-stone-500 uppercase text-xs mt-1">Tradizione</div>
                 </div>
             </div>
         </div>
-
-        <!-- Scroll Indicator - Minimalist -->
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 text-white/30">
-            <span class="text-[10px] tracking-[0.3em] uppercase">Scorri</span>
-            <div class="w-px h-12 bg-gradient-to-b from-gold/50 to-transparent"></div>
-        </div>
-    </section>
-
-    <!-- Stakeholder Paths - Enhanced with Editorial Layout -->
-    <section class="py-32 px-6 bg-cream relative overflow-hidden">
-        <!-- Subtle Background Texture -->
-        <div class="absolute inset-0 opacity-[0.02]" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%231B3A2F\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
         
-        <div class="max-w-6xl mx-auto relative z-10">
-            <div class="grid md:grid-cols-12 gap-12 items-start mb-20">
-                <div class="md:col-span-5 reveal-element opacity-0 translate-y-8">
-                    <span class="text-gold text-xs tracking-[0.3em] uppercase font-medium mb-4 block">Accesso differenziato</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-green-dark leading-tight">Scegli il tuo percorso di lettura</h2>
-                </div>
-                <div class="md:col-span-6 md:col-start-7 reveal-element opacity-0 translate-y-8 delay-100">
-                    <p class="text-charcoal/60 text-lg leading-relaxed border-l border-gold/30 pl-6">
-                        La pagina mantiene un'unica architettura informativa, ma offre ingressi differenziati secondo i diversi profili di stakeholder.
-                    </p>
-                </div>
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="w-6 h-6 text-stone-400"></i>
+        </div>
+    </header>
+
+    <!-- Access Paths -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="font-serif text-3xl text-stone-900 mb-2">Scegli il tuo percorso di lettura</h2>
+                <p class="text-stone-600">La pagina mantiene un'unica architettura informativa, ma offre ingressi differenziati secondo i diversi profili di stakeholder.</p>
             </div>
             
             <div class="grid md:grid-cols-3 gap-6">
-                <a href="#dati" class="reveal-element opacity-0 translate-y-8 path-card group relative bg-white p-10 border border-green-dark/10 hover:border-gold/40 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:shadow-2xl hover:-translate-y-2">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 transition-all duration-700 group-hover:scale-150 group-hover:bg-gold/10"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 rounded-full bg-green-dark/5 flex items-center justify-center mb-8 group-hover:bg-gold/10 transition-colors duration-500 border border-green-dark/10 group-hover:border-gold/30">
-                            <i data-lucide="eye" class="w-6 h-6 text-green-dark group-hover:text-gold transition-colors duration-500"></i>
-                        </div>
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="text-gold text-xs tracking-wider">01</span>
-                            <span class="w-8 h-px bg-gold/30"></span>
-                        </div>
-                        <h3 class="font-serif text-2xl text-green-dark mb-4 group-hover:text-green-dark/80 transition-colors">Consultazione sintetica</h3>
-                        <p class="text-sm text-charcoal/60 leading-relaxed">Visione rapida dei dati chiave e dei temi materiali per una lettura orientativa.</p>
-                    </div>
+                <a href="#performance" class="group p-8 bg-stone-50 rounded-2xl border border-stone-200 hover:border-amber-300 hover:shadow-lg transition-all duration-300">
+                    <div class="text-amber-700 font-serif text-4xl mb-4 opacity-50 group-hover:opacity-100 transition-opacity">01</div>
+                    <h3 class="font-serif text-xl text-stone-900 mb-2 group-hover:text-red-900 transition-colors">Consultazione sintetica</h3>
+                    <p class="text-sm text-stone-600 leading-relaxed">Visione rapida dei dati chiave e dei temi materiali per una lettura orientativa.</p>
                 </a>
                 
-                <a href="#filiera" class="reveal-element opacity-0 translate-y-8 path-card group relative bg-white p-10 border border-green-dark/10 hover:border-gold/40 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:shadow-2xl hover:-translate-y-2 delay-100">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 transition-all duration-700 group-hover:scale-150 group-hover:bg-gold/10"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 rounded-full bg-green-dark/5 flex items-center justify-center mb-8 group-hover:bg-gold/10 transition-colors duration-500 border border-green-dark/10 group-hover:border-gold/30">
-                            <i data-lucide="git-branch" class="w-6 h-6 text-green-dark group-hover:text-gold transition-colors duration-500"></i>
-                        </div>
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="text-gold text-xs tracking-wider">02</span>
-                            <span class="w-8 h-px bg-gold/30"></span>
-                        </div>
-                        <h3 class="font-serif text-2xl text-green-dark mb-4 group-hover:text-green-dark/80 transition-colors">Lettura di processo</h3>
-                        <p class="text-sm text-charcoal/60 leading-relaxed">Percorso lungo la filiera sostenibile, dalla vigna alla distribuzione.</p>
-                    </div>
+                <a href="#filiera" class="group p-8 bg-stone-50 rounded-2xl border border-stone-200 hover:border-amber-300 hover:shadow-lg transition-all duration-300">
+                    <div class="text-amber-700 font-serif text-4xl mb-4 opacity-50 group-hover:opacity-100 transition-opacity">02</div>
+                    <h3 class="font-serif text-xl text-stone-900 mb-2 group-hover:text-red-900 transition-colors">Lettura di processo</h3>
+                    <p class="text-sm text-stone-600 leading-relaxed">Percorso lungo la filiera sostenibile, dalla vigna alla distribuzione.</p>
                 </a>
                 
-                <a href="#identita" class="reveal-element opacity-0 translate-y-8 path-card group relative bg-white p-10 border border-green-dark/10 hover:border-gold/40 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:shadow-2xl hover:-translate-y-2 delay-200">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full -mr-16 -mt-16 transition-all duration-700 group-hover:scale-150 group-hover:bg-gold/10"></div>
-                    <div class="relative z-10">
-                        <div class="w-14 h-14 rounded-full bg-green-dark/5 flex items-center justify-center mb-8 group-hover:bg-gold/10 transition-colors duration-500 border border-green-dark/10 group-hover:border-gold/30">
-                            <i data-lucide="fingerprint" class="w-6 h-6 text-green-dark group-hover:text-gold transition-colors duration-500"></i>
-                        </div>
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="text-gold text-xs tracking-wider">03</span>
-                            <span class="w-8 h-px bg-gold/30"></span>
-                        </div>
-                        <h3 class="font-serif text-2xl text-green-dark mb-4 group-hover:text-green-dark/80 transition-colors">Lettura identitaria</h3>
-                        <p class="text-sm text-charcoal/60 leading-relaxed">Focus su governance, persone, territorio e radicamento culturale.</p>
-                    </div>
+                <a href="#identita" class="group p-8 bg-stone-50 rounded-2xl border border-stone-200 hover:border-amber-300 hover:shadow-lg transition-all duration-300">
+                    <div class="text-amber-700 font-serif text-4xl mb-4 opacity-50 group-hover:opacity-100 transition-opacity">03</div>
+                    <h3 class="font-serif text-xl text-stone-900 mb-2 group-hover:text-red-900 transition-colors">Lettura identitaria</h3>
+                    <p class="text-sm text-stone-600 leading-relaxed">Focus su governance, persone, territorio e radicamento culturale.</p>
                 </a>
-            </div>
-            
-            <div class="reveal-element opacity-0 translate-y-8 mt-20 p-8 bg-green-dark/5 border-l-4 border-gold relative">
-                <div class="absolute -left-1 top-0 bottom-0 w-1 bg-gold"></div>
-                <div class="flex items-start gap-4">
-                    <i data-lucide="info" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
-                    <p class="text-sm text-charcoal/70 leading-relaxed">
-                        <strong class="text-green-dark font-medium">Come leggere questi dati:</strong> I contenuti sintetizzano il Report di Sostenibilità 2024 di Berlucchi e ne facilitano la consultazione. Questa pagina privilegia chiarezza, orientamento e accessibilità, mentre il documento integrale resta il riferimento completo.
-                    </p>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Visual Break - Full Width Editorial Image -->
-    <section class="relative h-[60vh] min-h-[500px] overflow-hidden editorial-image-band">
-        <img src="http://static.photos/nature/1200x630/42" alt="Dettaglio vite e terroir" class="w-full h-full object-cover editorial-image-warm">
-        <div class="absolute inset-0 bg-gradient-to-r from-green-dark/85 via-green-dark/50 to-transparent"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-green-dark/60 via-transparent to-transparent"></div>
-        <div class="absolute inset-0 vignette-overlay"></div>
-        <div class="absolute inset-0 flex items-center">
-            <div class="max-w-6xl mx-auto px-6 md:px-12 w-full">
-                <div class="max-w-2xl reveal-element opacity-0 translate-y-8">
-                    <div class="flex items-center gap-4 mb-6">
-                        <span class="w-12 h-px bg-gold/60"></span>
-                        <span class="text-gold text-xs tracking-[0.3em] uppercase font-medium">Il Territorio</span>
+    <!-- Performance Section -->
+    <section id="performance" class="py-24 bg-stone-100 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-amber-100 rounded-full blur-3xl opacity-30 -translate-y-1/2 translate-x-1/2"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+                <div>
+                    <span class="text-amber-700 text-sm font-medium tracking-widest uppercase mb-2 block">Performance <span id="perf-year">2024</span></span>
+                    <h2 class="font-serif text-4xl md:text-5xl text-stone-900">Numeri che<br>orientano</h2>
+                </div>
+                <p class="text-stone-600 max-w-md text-sm leading-relaxed">
+                    La lettura del report attraverso gli indicatori chiave di performance sostenibile. 
+                    <span id="compare-hint" class="hidden text-amber-700 font-medium">I valori mostrano l'evoluzione dal 2019.</span>
+                </p>
+            </div>
+
+            <!-- KPI Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="kpi-grid">
+                <!-- KPIs generated by JS -->
+            </div>
+            
+            <div class="mt-8 flex items-center gap-2 text-xs text-stone-500">
+                <i data-lucide="check-circle" class="w-3 h-3"></i>
+                <span>Dati certificati secondo standard GRI</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Territorio Quote -->
+    <section class="py-24 bg-white">
+        <div class="max-w-5xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="relative">
+                    <img src="http://static.photos/nature/1200x630/42" alt="Dettaglio vite e terroir" class="rounded-2xl shadow-2xl">
+                    <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center">
+                        <span class="font-serif text-amber-800 text-2xl">B</span>
                     </div>
-                    <blockquote class="font-serif text-3xl md:text-5xl text-white leading-[1.1] italic mb-6">
+                </div>
+                <div>
+                    <span class="text-amber-700 text-sm font-medium tracking-widest uppercase mb-4 block">Il Territorio</span>
+                    <blockquote class="font-serif text-3xl md:text-4xl text-stone-900 leading-tight mb-8 italic">
                         "La sostenibilità nasce dalla terra, si traduce in gesto, si completa in bottiglia."
                     </blockquote>
-                    <p class="text-white/60 text-sm tracking-wide font-light">— Berlucchi, Franciacorta</p>
+                    <div class="flex items-center gap-4">
+                        <div class="h-px bg-stone-300 flex-1"></div>
+                        <span class="text-stone-500 text-sm">Berlucchi, Franciacorta</span>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Identità Section - Editorial Layout -->
-    <section id="identita" class="py-32 px-6 bg-white relative">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-12 gap-12 mb-20">
-                <div class="md:col-span-7 reveal-element opacity-0 translate-y-8">
-                    <span class="text-gold text-xs tracking-[0.3em] uppercase font-medium mb-6 block">Identità Aziendale</span>
-                    <h2 class="font-serif text-4xl md:text-6xl text-green-dark leading-[0.95] mb-8">Perché la sostenibilità per Berlucchi</h2>
-                    <p class="text-xl text-charcoal/70 leading-relaxed border-l-2 border-gold/40 pl-6">
+    <!-- Identità Section -->
+    <section id="identita" class="py-24 bg-stone-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <div>
+                    <span class="text-amber-700 text-sm font-medium tracking-widest uppercase mb-2 block">Identità Aziendale</span>
+                    <h2 class="font-serif text-4xl text-stone-900 mb-6">Perché la sostenibilità per Berlucchi</h2>
+                    <p class="text-stone-600 leading-relaxed mb-8">
                         Nel caso Berlucchi, la sostenibilità non è contenuto accessorio, ma criterio che attraversa strategia, filiera, territorio, qualità del prodotto e responsabilità verso gli stakeholder.
                     </p>
-                </div>
-                <div class="md:col-span-4 md:col-start-9 reveal-element opacity-0 translate-y-8 delay-100">
-                    <div class="bg-cream p-8 border-t-4 border-gold">
-                        <div class="text-gold font-serif text-5xl mb-2">63</div>
-                        <div class="text-green-dark text-sm uppercase tracking-wider mb-4">Anni di storia</div>
-                        <p class="text-charcoal/60 text-sm leading-relaxed">Una tradizione che guarda al futuro attraverso l'innovazione sostenibile.</p>
+                    
+                    <div class="flex items-center gap-6 mb-8">
+                        <div class="font-serif text-6xl text-red-900" id="years-history">63</div>
+                        <div class="text-stone-600 text-sm leading-relaxed">Anni di storia<br>Una tradizione che guarda al futuro</div>
                     </div>
-                </div>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="reveal-element opacity-0 translate-y-8 group p-8 border-t border-green-dark/20 hover:border-gold transition-colors duration-500">
-                    <div class="w-12 h-12 rounded-full bg-green-dark/5 flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors duration-500">
-                        <i data-lucide="shield-check" class="w-5 h-5 text-green-dark/60 group-hover:text-gold transition-colors duration-500"></i>
-                    </div>
-                    <h3 class="font-serif text-2xl text-green-dark mb-4">Una responsabilità integrata</h3>
-                    <p class="text-charcoal/60 leading-relaxed text-sm">Governance dedicata, temi materiali, monitoraggio dei dati e attenzione all'equilibrio tra dimensione ambientale, sociale, territoriale ed economica.</p>
                 </div>
                 
-                <div class="reveal-element opacity-0 translate-y-8 delay-100 group p-8 border-t border-green-dark/20 hover:border-gold transition-colors duration-500">
-                    <div class="w-12 h-12 rounded-full bg-green-dark/5 flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors duration-500">
-                        <i data-lucide="link" class="w-5 h-5 text-green-dark/60 group-hover:text-gold transition-colors duration-500"></i>
+                <div class="space-y-6">
+                    <div class="p-6 bg-white rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="font-serif text-xl text-stone-900 mb-2">Una responsabilità integrata</h3>
+                        <p class="text-stone-600 text-sm leading-relaxed">Governance dedicata, temi materiali, monitoraggio dei dati e attenzione all'equilibrio tra dimensione ambientale, sociale, territoriale ed economica.</p>
                     </div>
-                    <h3 class="font-serif text-2xl text-green-dark mb-4">Una filiera che genera valore</h3>
-                    <p class="text-charcoal/60 leading-relaxed text-sm">Vigneto, partner, vendemmia, vinificazione, confezionamento, distribuzione e hospitality: continuità di processo lungo l'intera catena del valore.</p>
-                </div>
-                
-                <div class="reveal-element opacity-0 translate-y-8 delay-200 group p-8 border-t border-green-dark/20 hover:border-gold transition-colors duration-500">
-                    <div class="w-12 h-12 rounded-full bg-green-dark/5 flex items-center justify-center mb-6 group-hover:bg-gold/10 transition-colors duration-500">
-                        <i data-lucide="scan-eye" class="w-5 h-5 text-green-dark/60 group-hover:text-gold transition-colors duration-500"></i>
+                    <div class="p-6 bg-white rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="font-serif text-xl text-stone-900 mb-2">Una filiera che genera valore</h3>
+                        <p class="text-stone-600 text-sm leading-relaxed">Vigneto, partner, vendemmia, vinificazione, confezionamento, distribuzione e hospitality: continuità di processo lungo l'intera catena del valore.</p>
                     </div>
-                    <h3 class="font-serif text-2xl text-green-dark mb-4">Trasparenza come mediazione</h3>
-                    <p class="text-charcoal/60 leading-relaxed text-sm">Questa interfaccia non sostituisce il report, ma ne organizza l'accesso. Riduce la densità documentale e facilita una consultazione multilivello.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- KPI Section - Enhanced Visual Sophistication -->
-    <section id="dati" class="py-32 px-6 bg-green-dark text-white relative overflow-hidden">
-        <!-- Layered Background Effects -->
-        <div class="absolute inset-0 opacity-20">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,_rgba(201,169,97,0.15),transparent_50%)]"></div>
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,_rgba(45,90,72,0.3),transparent_50%)]"></div>
-        </div>
-        <!-- Subtle Grid Pattern -->
-        <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 100px 100px;"></div>
-        
-        <div class="max-w-6xl mx-auto relative z-10">
-            <div class="grid md:grid-cols-2 gap-12 items-end mb-20">
-                <div class="reveal-element opacity-0 translate-y-8">
-                    <span class="text-gold text-xs tracking-[0.3em] uppercase font-medium mb-4 block">Performance 2024</span>
-                    <h2 class="font-serif text-4xl md:text-6xl leading-[0.9]">Numeri che<br><span class="text-gold italic">orientano</span></h2>
-                </div>
-                <div class="reveal-element opacity-0 translate-y-8 delay-100">
-                    <p class="text-white/50 italic font-serif text-xl border-l-2 border-gold/40 pl-6">
-                        La lettura del report attraverso gli indicatori chiave di performance sostenibile.
-                    </p>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-                <!-- KPI Cards - Enhanced -->
-                <div class="kpi-card reveal-element opacity-0 translate-y-8 group relative p-8 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-gold/50 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:-translate-y-2">
-                    <div class="flex items-center justify-between mb-4">
-                        <i data-lucide="map" class="w-5 h-5 text-gold/60"></i>
-                        <span class="text-white/30 text-[10px] tracking-widest uppercase">Ettari</span>
-                    </div>
-                    <div class="kpi-value font-serif text-5xl text-gold mb-2" data-target="115">0</div>
-                    <div class="text-xs text-white/60 uppercase tracking-wider mb-3">vigneto proprio</div>
-                    <p class="text-xs text-white/30 leading-relaxed">Base agricola diretta del modello produttivo.</p>
-                    <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-700 group-hover:w-full"></div>
-                </div>
-                
-                <div class="kpi-card reveal-element opacity-0 translate-y-8 delay-100 group relative p-8 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-gold/50 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:-translate-y-2">
-                    <div class="flex items-center justify-between mb-4">
-                        <i data-lucide="users" class="w-5 h-5 text-gold/60"></i>
-                        <span class="text-white/30 text-[10px] tracking-widest uppercase">Rete</span>
-                    </div>
-                    <div class="kpi-value font-serif text-5xl text-gold mb-2" data-target="450">0</div>
-                    <div class="text-xs text-white/60 uppercase tracking-wider mb-3">ettari partner</div>
-                    <p class="text-xs text-white/30 leading-relaxed">Estensione della filiera viticola collegata.</p>
-                    <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-700 group-hover:w-full"></div>
-                </div>
-                
-                <div class="kpi-card reveal-element opacity-0 translate-y-8 delay-200 group relative p-8 bg-white/5 backdrop-blur-sm border border-gold/30 hover:border-gold/60 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:-translate-y-2">
-                    <div class="flex items-center justify-between mb-4">
-                        <i data-lucide="trending-up" class="w-5 h-5 text-gold"></i>
-                        <span class="text-gold text-[10px] tracking-widest uppercase">Valore</span>
-                    </div>
-                    <div class="kpi-value font-serif text-5xl text-gold mb-2" data-target="59.6" data-suffix="M€" data-decimals="1">0</div>
-                    <div class="text-xs text-white/60 uppercase tracking-wider mb-3">generato</div>
-                    <p class="text-xs text-white/30 leading-relaxed">Distribuito agli stakeholder.</p>
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full blur-3xl -mr-16 -mt-16 animate-pulse-slow"></div>
-                    <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-700 group-hover:w-full"></div>
-                </div>
-                
-                <div class="kpi-card reveal-element opacity-0 translate-y-8 delay-300 group relative p-8 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-gold/50 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:-translate-y-2">
-                    <div class="flex items-center justify-between mb-4">
-                        <i data-lucide="wine" class="w-5 h-5 text-gold/60"></i>
-                        <span class="text-white/30 text-[10px] tracking-widest uppercase">Volume</span>
-                    </div>
-                    <div class="kpi-value font-serif text-5xl text-gold mb-2" data-target="4" data-suffix="M">0</div>
-                    <div class="text-xs text-white/60 uppercase tracking-wider mb-3">bottiglie</div>
-                    <p class="text-xs text-white/30 leading-relaxed">Volume produttivo annuale.</p>
-                    <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-700 group-hover:w-full"></div>
-                </div>
-                
-                <div class="kpi-card reveal-element opacity-0 translate-y-8 group relative p-8 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-gold/50 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:-translate-y-2">
-                    <div class="flex items-center justify-between mb-4">
-                        <i data-lucide="globe" class="w-5 h-5 text-gold/60"></i>
-                        <span class="text-white/30 text-[10px] tracking-widest uppercase">Export</span>
-                    </div>
-                    <div class="kpi-value font-serif text-5xl text-gold mb-2" data-target="44">0</div>
-                    <div class="text-xs text-white/60 uppercase tracking-wider mb-3">paesi serviti</div>
-                    <p class="text-xs text-white/30 leading-relaxed">Presenza internazionale.</p>
-                    <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-700 group-hover:w-full"></div>
-                </div>
-                
-                <div class="kpi-card reveal-element opacity-0 translate-y-8 delay-100 group relative p-8 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-gold/50 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:-translate-y-2">
-                    <div class="flex items-center justify-between mb-4">
-                        <i data-lucide="sun" class="w-5 h-5 text-gold/60"></i>
-                        <span class="text-white/30 text-[10px] tracking-widest uppercase">Energia</span>
-                    </div>
-                    <div class="kpi-value font-serif text-5xl text-gold mb-2" data-target="29" data-suffix="%">0</div>
-                    <div class="text-xs text-white/60 uppercase tracking-wider mb-3">fotovoltaico</div>
-                    <p class="text-xs text-white/30 leading-relaxed">Transizione energetica.</p>
-                    <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-700 group-hover:w-full"></div>
-                </div>
-                
-                <div class="kpi-card reveal-element opacity-0 translate-y-8 delay-200 group relative p-8 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-gold/50 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:-translate-y-2">
-                    <div class="flex items-center justify-between mb-4">
-                        <i data-lucide="recycle" class="w-5 h-5 text-gold/60"></i>
-                        <span class="text-white/30 text-[10px] tracking-widest uppercase">Circolarità</span>
-                    </div>
-                    <div class="kpi-value font-serif text-5xl text-gold mb-2" data-target="88" data-suffix="%">0</div>
-                    <div class="text-xs text-white/60 uppercase tracking-wider mb-3">rifiuti recupero</div>
-                    <p class="text-xs text-white/30 leading-relaxed">Indicatore di circolarità.</p>
-                    <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-700 group-hover:w-full"></div>
-                </div>
-                
-                <div class="kpi-card reveal-element opacity-0 translate-y-8 delay-300 group relative p-8 bg-white/5 backdrop-blur-sm border border-white/10 hover:border-gold/50 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] hover:-translate-y-2">
-                    <div class="flex items-center justify-between mb-4">
-                        <i data-lucide="briefcase" class="w-5 h-5 text-gold/60"></i>
-                        <span class="text-white/30 text-[10px] tracking-widest uppercase">Team</span>
-                    </div>
-                    <div class="kpi-value font-serif text-5xl text-gold mb-2" data-target="123">0</div>
-                    <div class="text-xs text-white/60 uppercase tracking-wider mb-3">dipendenti</div>
-                    <p class="text-xs text-white/30 leading-relaxed">Dimensione organizzativa.</p>
-                    <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-700 group-hover:w-full"></div>
-                </div>
-            </div>
-            
-            <div class="reveal-element opacity-0 translate-y-8 border-t border-white/10 pt-12">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="flex items-center gap-8">
-                        <div class="w-24 h-24 rounded-full border border-gold/30 flex items-center justify-center bg-gold/5">
-                            <span class="font-serif text-3xl text-gold">19.619</span>
-                        </div>
-                        <div>
-                            <div class="text-white/80 text-sm uppercase tracking-wider mb-1">Visitatori annuali</div>
-                            <p class="text-white/40 text-sm">Rilevanza dell'hospitality e del paesaggio</p>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <div class="inline-flex items-center gap-4 px-8 py-4 border border-gold/30 bg-gold/5">
-                            <i data-lucide="sparkles" class="w-5 h-5 text-gold"></i>
-                            <span class="text-white/80 text-sm tracking-wider">Dati certificati secondo standard GRI</span>
-                        </div>
+                    <div class="p-6 bg-white rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="font-serif text-xl text-stone-900 mb-2">Trasparenza come mediazione</h3>
+                        <p class="text-stone-600 text-sm leading-relaxed">Questa interfaccia non sostituisce il report, ma ne organizza l'accesso. Riduce la densità documentale e facilita una consultazione multilivello.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Materialità Section - Editorial Layout with Icons -->
-    <section class="py-32 px-6 bg-cream relative">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-12 gap-12 mb-20">
-                <div class="md:col-span-8 reveal-element opacity-0 translate-y-8">
-                    <span class="text-gold text-xs tracking-[0.3em] uppercase font-medium mb-4 block">Materialità</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-green-dark leading-tight mb-6">I temi materiali come sistema di orientamento</h2>
-                    <p class="text-charcoal/60 text-lg max-w-2xl leading-relaxed">La materialità non è lista tecnica, ma principio ordinatore. Ogni area esplicita il motivo della sua rilevanza.</p>
-                </div>
-                <div class="md:col-span-4 reveal-element opacity-0 translate-y-8 delay-100 flex items-end">
-                    <div class="w-full h-px bg-gradient-to-r from-gold/50 to-transparent"></div>
-                </div>
+    <!-- Materialità -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-serif text-4xl text-stone-900 mb-4">I temi materiali come sistema di orientamento</h2>
+                <p class="text-stone-600">La materialità non è lista tecnica, ma principio ordinatore. Ogni area esplicita il motivo della sua rilevanza.</p>
             </div>
             
-            <div class="grid md:grid-cols-2 gap-6">
-                <!-- Ambiente -->
-                <div class="reveal-element opacity-0 translate-y-8 material-card group relative bg-white p-10 border border-green-dark/10 hover:border-gold/30 transition-all duration-700">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-green-dark group-hover:bg-gold transition-colors duration-500"></div>
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="w-16 h-16 rounded-full bg-green-dark/5 flex items-center justify-center group-hover:bg-gold/10 transition-colors duration-500 border border-green-dark/10">
-                            <i data-lucide="leaf" class="w-7 h-7 text-green-dark/60 group-hover:text-gold transition-colors duration-500"></i>
-                        </div>
-                        <span class="text-gold/40 font-serif text-4xl">01</span>
-                    </div>
-                    <h3 class="font-serif text-3xl text-green-dark mb-6">Ambiente</h3>
-                    <div class="space-y-6">
-                        <div>
-                            <span class="text-gold text-xs uppercase tracking-wider font-medium block mb-2">Perché è rilevante</span>
-                            <p class="text-charcoal/60 leading-relaxed text-sm">Rende visibili gli impatti collegati al vigneto, ai consumi e alla gestione delle risorse.</p>
-                        </div>
-                        <div class="pt-4 border-t border-green-dark/10">
-                            <span class="text-green-dark/50 text-xs uppercase tracking-wider font-medium block mb-2">Dove si manifesta</span>
-                            <p class="text-charcoal/50 text-sm leading-relaxed">Nei KPI ambientali, nella filiera sostenibile, nelle pratiche agronomiche e nell'innovazione.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Sociale -->
-                <div class="reveal-element opacity-0 translate-y-8 delay-100 material-card group relative bg-white p-10 border border-green-dark/10 hover:border-gold/30 transition-all duration-700">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-green-dark group-hover:bg-gold transition-colors duration-500"></div>
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="w-16 h-16 rounded-full bg-green-dark/5 flex items-center justify-center group-hover:bg-gold/10 transition-colors duration-500 border border-green-dark/10">
-                            <i data-lucide="users" class="w-7 h-7 text-green-dark/60 group-hover:text-gold transition-colors duration-500"></i>
-                        </div>
-                        <span class="text-gold/40 font-serif text-4xl">02</span>
-                    </div>
-                    <h3 class="font-serif text-3xl text-green-dark mb-6">Sociale</h3>
-                    <div class="space-y-6">
-                        <div>
-                            <span class="text-gold text-xs uppercase tracking-wider font-medium block mb-2">Perché è rilevante</span>
-                            <p class="text-charcoal/60 leading-relaxed text-sm">Mostra che la sostenibilità riguarda anche condizioni di lavoro e responsabilità verso il consumatore.</p>
-                        </div>
-                        <div class="pt-4 border-t border-green-dark/10">
-                            <span class="text-green-dark/50 text-xs uppercase tracking-wider font-medium block mb-2">Dove si manifesta</span>
-                            <p class="text-charcoal/50 text-sm leading-relaxed">Nella sezione persone e territorio, nei dati organizzativi e nei contenuti sulla qualità.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Territorio -->
-                <div class="reveal-element opacity-0 translate-y-8 delay-200 material-card group relative bg-white p-10 border border-green-dark/10 hover:border-gold/30 transition-all duration-700">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-green-dark group-hover:bg-gold transition-colors duration-500"></div>
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="w-16 h-16 rounded-full bg-green-dark/5 flex items-center justify-center group-hover:bg-gold/10 transition-colors duration-500 border border-green-dark/10">
-                            <i data-lucide="map-pin" class="w-7 h-7 text-green-dark/60 group-hover:text-gold transition-colors duration-500"></i>
-                        </div>
-                        <span class="text-gold/40 font-serif text-4xl">03</span>
-                    </div>
-                    <h3 class="font-serif text-3xl text-green-dark mb-6">Territorio</h3>
-                    <div class="space-y-6">
-                        <div>
-                            <span class="text-gold text-xs uppercase tracking-wider font-medium block mb-2">Perché è rilevante</span>
-                            <p class="text-charcoal/60 leading-relaxed text-sm">Collega sostenibilità, reputazione e radicamento territoriale, evitando una lettura esclusivamente tecnica.</p>
-                        </div>
-                        <div class="pt-4 border-t border-green-dark/10">
-                            <span class="text-green-dark/50 text-xs uppercase tracking-wider font-medium block mb-2">Dove si manifesta</span>
-                            <p class="text-charcoal/50 text-sm leading-relaxed">Nella filiera, nella sezione persone e territorio, nell'hospitality e nelle iniziative culturali.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Governance -->
-                <div class="reveal-element opacity-0 translate-y-8 delay-300 material-card group relative bg-white p-10 border border-green-dark/10 hover:border-gold/30 transition-all duration-700">
-                    <div class="absolute top-0 left-0 w-1 h-full bg-green-dark group-hover:bg-gold transition-colors duration-500"></div>
-                    <div class="flex justify-between items-start mb-8">
-                        <div class="w-16 h-16 rounded-full bg-green-dark/5 flex items-center justify-center group-hover:bg-gold/10 transition-colors duration-500 border border-green-dark/10">
-                            <i data-lucide="shield" class="w-7 h-7 text-green-dark/60 group-hover:text-gold transition-colors duration-500"></i>
-                        </div>
-                        <span class="text-gold/40 font-serif text-4xl">04</span>
-                    </div>
-                    <h3 class="font-serif text-3xl text-green-dark mb-6">Governance</h3>
-                    <div class="space-y-6">
-                        <div>
-                            <span class="text-gold text-xs uppercase tracking-wider font-medium block mb-2">Perché è rilevante</span>
-                            <p class="text-charcoal/60 leading-relaxed text-sm">Rende credibile la sostenibilità come management integrato e non come comunicazione episodica.</p>
-                        </div>
-                        <div class="pt-4 border-t border-green-dark/10">
-                            <span class="text-green-dark/50 text-xs uppercase tracking-wider font-medium block mb-2">Dove si manifesta</span>
-                            <p class="text-charcoal/50 text-sm leading-relaxed">Nella sezione governance e accountability, nella logica di materialità e nell'organizzazione del reporting.</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8" id="materialita-grid">
+                <!-- Content injected by JS based on year -->
             </div>
         </div>
     </section>
 
-    <!-- Filiera Timeline Section -->
-    <section id="filiera" class="py-32 px-6 bg-white relative overflow-hidden timeline-section">
-        <div class="max-w-6xl mx-auto">
-            <div class="reveal-element opacity-0 translate-y-5 mb-16 text-center">
-                <span class="text-gold text-xs tracking-[0.3em] uppercase font-medium">Filiera sostenibile</span>
-                <h2 class="font-serif text-4xl md:text-5xl text-green-dark mt-4 mb-6">La sostenibilità come processo distribuito</h2>
-                <p class="text-charcoal/70 max-w-2xl mx-auto mb-12 leading-relaxed">La sostenibilità non coincide con un solo reparto, ma attraversa fasi diverse, collegate tra loro in modo continuo.</p>
-                <div class="max-w-4xl mx-auto relative">
-                    <img src="http://static.photos/wine/1024x576/42" alt="Processo di vinificazione" class="w-full h-64 md:h-80 object-cover rounded-sm shadow-xl">
-                    <div class="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent"></div>
-                </div>
-            </div>
-            
-            <div class="relative max-w-5xl mx-auto timeline-container">
-                <!-- Desktop Timeline Grid -->
-                <div class="hidden md:block">
-                    <!-- Line Container -->
-                    <div class="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-green-dark/15 timeline-track">
-                        <div id="timeline-progress-desktop" class="absolute top-0 left-0 w-full bg-gold origin-top scale-y-0 transition-transform duration-[2500ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]"></div>
-                    </div>
-                    
-                    <!-- Item 1 - Left -->
-                    <div class="timeline-item-desktop grid grid-cols-[1fr_100px_1fr] gap-0 items-center mb-20 opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
-                        <div class="text-right pr-12 relative">
-                            <div class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-px bg-gold/30"></div>
-                            <span class="text-gold text-xs tracking-[0.2em] uppercase block mb-2 font-medium">Fase 01</span>
-                            <h3 class="font-serif text-2xl text-green-dark mb-3">Vigneto e approvvigionamento</h3>
-                            <p class="text-sm text-charcoal/70 leading-relaxed max-w-sm ml-auto">La base agricola diretta e la relazione con i viticoltori partner costituiscono il primo livello del modello di sostenibilità.</p>
-                        </div>
-                        <div class="flex justify-center relative z-10">
-                            <div class="timeline-dot w-10 h-10 rounded-full bg-white border-[3px] border-green-dark/20 flex items-center justify-center transition-all duration-500 shadow-sm">
-                                <div class="timeline-dot-inner w-3 h-3 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                            </div>
-                        </div>
-                        <div></div>
-                    </div>
-                    
-                    <!-- Item 2 - Right -->
-                    <div class="timeline-item-desktop grid grid-cols-[1fr_100px_1fr] gap-0 items-center mb-20 opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-100">
-                        <div></div>
-                        <div class="flex justify-center relative z-10">
-                            <div class="timeline-dot w-10 h-10 rounded-full bg-white border-[3px] border-green-dark/20 flex items-center justify-center transition-all duration-500 shadow-sm">
-                                <div class="timeline-dot-inner w-3 h-3 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                            </div>
-                        </div>
-                        <div class="pl-12 relative">
-                            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-px bg-gold/30"></div>
-                            <span class="text-gold text-xs tracking-[0.2em] uppercase block mb-2 font-medium">Fase 02</span>
-                            <h3 class="font-serif text-2xl text-green-dark mb-3">Vendemmia</h3>
-                            <p class="text-sm text-charcoal/70 leading-relaxed max-w-sm">La fase di raccolta collega qualità della materia prima, organizzazione operativa e continuità della filiera.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Item 3 - Left -->
-                    <div class="timeline-item-desktop grid grid-cols-[1fr_100px_1fr] gap-0 items-center mb-20 opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-200">
-                        <div class="text-right pr-12 relative">
-                            <div class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-px bg-gold/30"></div>
-                            <span class="text-gold text-xs tracking-[0.2em] uppercase block mb-2 font-medium">Fase 03</span>
-                            <h3 class="font-serif text-2xl text-green-dark mb-3">Vinificazione</h3>
-                            <p class="text-sm text-charcoal/70 leading-relaxed max-w-sm ml-auto">La trasformazione integra processo produttivo, controllo qualitativo e attenzione alle risorse.</p>
-                        </div>
-                        <div class="flex justify-center relative z-10">
-                            <div class="timeline-dot w-10 h-10 rounded-full bg-white border-[3px] border-green-dark/20 flex items-center justify-center transition-all duration-500 shadow-sm">
-                                <div class="timeline-dot-inner w-3 h-3 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                            </div>
-                        </div>
-                        <div></div>
-                    </div>
-                    
-                    <!-- Item 4 - Right -->
-                    <div class="timeline-item-desktop grid grid-cols-[1fr_100px_1fr] gap-0 items-center mb-20 opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-300">
-                        <div></div>
-                        <div class="flex justify-center relative z-10">
-                            <div class="timeline-dot w-10 h-10 rounded-full bg-white border-[3px] border-green-dark/20 flex items-center justify-center transition-all duration-500 shadow-sm">
-                                <div class="timeline-dot-inner w-3 h-3 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                            </div>
-                        </div>
-                        <div class="pl-12 relative">
-                            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-px bg-gold/30"></div>
-                            <span class="text-gold text-xs tracking-[0.2em] uppercase block mb-2 font-medium">Fase 04</span>
-                            <h3 class="font-serif text-2xl text-green-dark mb-3">Confezionamento</h3>
-                            <p class="text-sm text-charcoal/70 leading-relaxed max-w-sm">Materiali, gestione degli scarti e logiche di circolarità in una fase chiave della catena del valore.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Item 5 - Left -->
-                    <div class="timeline-item-desktop grid grid-cols-[1fr_100px_1fr] gap-0 items-center mb-20 opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-400">
-                        <div class="text-right pr-12 relative">
-                            <div class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-px bg-gold/30"></div>
-                            <span class="text-gold text-xs tracking-[0.2em] uppercase block mb-2 font-medium">Fase 05</span>
-                            <h3 class="font-serif text-2xl text-green-dark mb-3">Distribuzione</h3>
-                            <p class="text-sm text-charcoal/70 leading-relaxed max-w-sm ml-auto">La presenza internazionale estende la sostenibilità oltre il luogo di produzione e la collega alla responsabilità commerciale.</p>
-                        </div>
-                        <div class="flex justify-center relative z-10">
-                            <div class="timeline-dot w-10 h-10 rounded-full bg-white border-[3px] border-green-dark/20 flex items-center justify-center transition-all duration-500 shadow-sm">
-                                <div class="timeline-dot-inner w-3 h-3 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                            </div>
-                        </div>
-                        <div></div>
-                    </div>
-                    
-                    <!-- Item 6 - Right -->
-                    <div class="timeline-item-desktop grid grid-cols-[1fr_100px_1fr] gap-0 items-center opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-500">
-                        <div></div>
-                        <div class="flex justify-center relative z-10">
-                            <div class="timeline-dot w-10 h-10 rounded-full bg-white border-[3px] border-green-dark/20 flex items-center justify-center transition-all duration-500 shadow-sm">
-                                <div class="timeline-dot-inner w-3 h-3 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                            </div>
-                        </div>
-                        <div class="pl-12 relative">
-                            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-px bg-gold/30"></div>
-                            <span class="text-gold text-xs tracking-[0.2em] uppercase block mb-2 font-medium">Fase 06</span>
-                            <h3 class="font-serif text-2xl text-green-dark mb-3">Hospitality</h3>
-                            <p class="text-sm text-charcoal/70 leading-relaxed max-w-sm">Il rapporto con visitatori e territorio mostra che il valore Berlucchi prosegue nell'esperienza, oltre la bottiglia.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Mobile Timeline -->
-                <div class="md:hidden relative pl-12 space-y-12">
-                    <div class="absolute left-4 top-0 bottom-0 w-px bg-green-dark/10">
-                        <div id="timeline-progress-mobile" class="absolute top-0 left-0 w-full bg-gold/60 origin-top scale-y-0 transition-transform duration-[2500ms] ease-[cubic-bezier(0.25,0.1,0.25,1)]"></div>
-                    </div>
-                    
-                    <div class="timeline-item-mobile relative opacity-0 translate-x-4 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)]">
-                        <div class="absolute -left-12 top-1 w-8 h-8 rounded-full bg-white border-2 border-green-dark/30 flex items-center justify-center timeline-dot-mobile transition-all duration-500">
-                            <div class="timeline-dot-inner w-2 h-2 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                        </div>
-                        <span class="text-gold text-xs tracking-wider uppercase block mb-2">Fase 01</span>
-                        <h3 class="font-serif text-xl text-green-dark mb-2">Vigneto e approvvigionamento</h3>
-                        <p class="text-sm text-charcoal/70 leading-relaxed">La base agricola diretta e la relazione con i viticoltori partner costituiscono il primo livello del modello di sostenibilità.</p>
-                    </div>
-                    
-                    <div class="timeline-item-mobile relative opacity-0 translate-x-4 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-100">
-                        <div class="absolute -left-12 top-1 w-8 h-8 rounded-full bg-white border-2 border-green-dark/30 flex items-center justify-center timeline-dot-mobile transition-all duration-500">
-                            <div class="timeline-dot-inner w-2 h-2 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                        </div>
-                        <span class="text-gold text-xs tracking-wider uppercase block mb-2">Fase 02</span>
-                        <h3 class="font-serif text-xl text-green-dark mb-2">Vendemmia</h3>
-                        <p class="text-sm text-charcoal/70 leading-relaxed">La fase di raccolta collega qualità della materia prima, organizzazione operativa e continuità della filiera.</p>
-                    </div>
-                    
-                    <div class="timeline-item-mobile relative opacity-0 translate-x-4 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-200">
-                        <div class="absolute -left-12 top-1 w-8 h-8 rounded-full bg-white border-2 border-green-dark/30 flex items-center justify-center timeline-dot-mobile transition-all duration-500">
-                            <div class="timeline-dot-inner w-2 h-2 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                        </div>
-                        <span class="text-gold text-xs tracking-wider uppercase block mb-2">Fase 03</span>
-                        <h3 class="font-serif text-xl text-green-dark mb-2">Vinificazione</h3>
-                        <p class="text-sm text-charcoal/70 leading-relaxed">La trasformazione integra processo produttivo, controllo qualitativo e attenzione alle risorse.</p>
-                    </div>
-                    
-                    <div class="timeline-item-mobile relative opacity-0 translate-x-4 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-300">
-                        <div class="absolute -left-12 top-1 w-8 h-8 rounded-full bg-white border-2 border-green-dark/30 flex items-center justify-center timeline-dot-mobile transition-all duration-500">
-                            <div class="timeline-dot-inner w-2 h-2 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                        </div>
-                        <span class="text-gold text-xs tracking-wider uppercase block mb-2">Fase 04</span>
-                        <h3 class="font-serif text-xl text-green-dark mb-2">Confezionamento</h3>
-                        <p class="text-sm text-charcoal/70 leading-relaxed">Materiali, gestione degli scarti e logiche di circolarità in una fase chiave della catena del valore.</p>
-                    </div>
-                    
-                    <div class="timeline-item-mobile relative opacity-0 translate-x-4 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-400">
-                        <div class="absolute -left-12 top-1 w-8 h-8 rounded-full bg-white border-2 border-green-dark/30 flex items-center justify-center timeline-dot-mobile transition-all duration-500">
-                            <div class="timeline-dot-inner w-2 h-2 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                        </div>
-                        <span class="text-gold text-xs tracking-wider uppercase block mb-2">Fase 05</span>
-                        <h3 class="font-serif text-xl text-green-dark mb-2">Distribuzione</h3>
-                        <p class="text-sm text-charcoal/70 leading-relaxed">La presenza internazionale estende la sostenibilità oltre il luogo di produzione e la collega alla responsabilità commerciale.</p>
-                    </div>
-                    
-                    <div class="timeline-item-mobile relative opacity-0 translate-x-4 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-500">
-                        <div class="absolute -left-12 top-1 w-8 h-8 rounded-full bg-white border-2 border-green-dark/30 flex items-center justify-center timeline-dot-mobile transition-all duration-500">
-                            <div class="timeline-dot-inner w-2 h-2 rounded-full bg-green-dark/30 transition-all duration-500"></div>
-                        </div>
-                        <span class="text-gold text-xs tracking-wider uppercase block mb-2">Fase 06</span>
-                        <h3 class="font-serif text-xl text-green-dark mb-2">Hospitality</h3>
-                        <p class="text-sm text-charcoal/70 leading-relaxed">Il rapporto con visitatori e territorio mostra che il valore Berlucchi prosegue nell'esperienza, oltre la bottiglia.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Governance Section -->
-    <section id="governance" class="py-24 px-6 bg-green-dark text-white relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(201,169,97,0.1),transparent_70%)]"></div>
-        </div>
-        
-        <div class="max-w-5xl mx-auto relative z-10">
-            <div class="reveal-element opacity-0 translate-y-5 mb-16 text-center">
-                <span class="text-gold text-sm tracking-[0.2em] uppercase font-medium">Governance e accountability</span>
-                <h2 class="font-serif text-4xl md:text-5xl mt-4 mb-4">Un assetto organizzativo leggibile</h2>
-                <p class="text-white/60 max-w-2xl mx-auto">La credibilità della sostenibilità dipende dalla visibilità delle responsabilità organizzative.</p>
+    <!-- Filiera Section -->
+    <section id="filiera" class="py-24 bg-stone-100">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="mb-16">
+                <span class="text-amber-700 text-sm font-medium tracking-widest uppercase mb-2 block">Filiera sostenibile <span id="filiera-year">2024</span></span>
+                <h2 class="font-serif text-4xl md:text-5xl text-stone-900 mb-6">La sostenibilità come processo distribuito</h2>
+                <p class="text-stone-600 max-w-2xl">La sostenibilità non coincide con un solo reparto, ma attraversa fasi diverse, collegate tra loro in modo continuo.</p>
             </div>
             
             <div class="relative">
-                <!-- Connector Line -->
-                <div class="hidden md:block absolute top-1/2 left-[16.67%] right-[16.67%] h-px bg-white/20">
-                    <div id="governance-connector" class="h-full bg-gold/60 origin-left scale-x-0 transition-transform duration-1000 ease-[cubic-bezier(0.25,0.1,0.25,1)]"></div>
+                <div class="grid lg:grid-cols-2 gap-12 items-start">
+                    <div class="sticky top-40">
+                        <img src="http://static.photos/wine/1024x576/42" alt="Processo di vinificazione" class="rounded-2xl shadow-xl w-full" id="filiera-image">
+                    </div>
+                    
+                    <div class="space-y-8" id="filiera-steps">
+                        <!-- Steps injected by JS -->
+                    </div>
                 </div>
-                
-                <div class="grid md:grid-cols-3 gap-8 md:gap-12">
-                    <!-- Node 1 -->
-                    <div class="governance-node opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] group">
-                        <div class="relative p-8 bg-white/5 backdrop-blur-sm rounded-sm border border-white/10 hover:border-gold/50 transition-all duration-500 hover:bg-white/10">
-                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-green-dark border-2 border-gold flex items-center justify-center">
-                                <span class="text-gold text-xs font-bold">1</span>
-                            </div>
-                            <div class="text-center mt-4">
-                                <span class="text-gold text-xs tracking-wider uppercase block mb-2">Livello strategico</span>
-                                <h3 class="font-serif text-xl mb-3">Consiglio di Amministrazione</h3>
-                                <p class="text-sm text-white/60 leading-relaxed">Definisce l'indirizzo strategico e colloca la sostenibilità entro una cornice di responsabilità aziendale complessiva.</p>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Governance -->
+    <section id="governance" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="text-amber-700 text-sm font-medium tracking-widest uppercase mb-2 block">Governance e accountability</span>
+                    <h2 class="font-serif text-4xl text-stone-900 mb-6">Un assetto organizzativo leggibile</h2>
+                    <p class="text-stone-600 leading-relaxed mb-8">La credibilità della sostenibilità dipende dalla visibilità delle responsabilità organizzative.</p>
                     
-                    <!-- Node 2 -->
-                    <div class="governance-node opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-200 group">
-                        <div class="relative p-8 bg-white/5 backdrop-blur-sm rounded-sm border border-white/10 hover:border-gold/50 transition-all duration-500 hover:bg-white/10">
-                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-green-dark border-2 border-gold flex items-center justify-center">
-                                <span class="text-gold text-xs font-bold">2</span>
-                            </div>
-                            <div class="text-center mt-4">
-                                <span class="text-gold text-xs tracking-wider uppercase block mb-2">Livello di coordinamento</span>
-                                <h3 class="font-serif text-xl mb-3">Comitato Strategico</h3>
-                                <p class="text-sm text-white/60 leading-relaxed">Connette priorità, progettualità e monitoraggio, traducendo la sostenibilità in presidio organizzativo.</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Node 3 -->
-                    <div class="governance-node opacity-0 translate-y-8 transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] delay-400 group">
-                        <div class="relative p-8 bg-white/5 backdrop-blur-sm rounded-sm border border-white/10 hover:border-gold/50 transition-all duration-500 hover:bg-white/10">
-                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-green-dark border-2 border-gold flex items-center justify-center">
-                                <span class="text-gold text-xs font-bold">3</span>
-                            </div>
-                            <div class="text-center mt-4">
-                                <span class="text-gold text-xs tracking-wider uppercase block mb-2">Livello operativo</span>
-                                <h3 class="font-serif text-xl mb-3">Comitato dei Referenti</h3>
-                                <p class="text-sm text-white/60 leading-relaxed">Supporta raccolta delle informazioni, raccordo tra funzioni e continuità operativa del reporting.</p>
-                            </div>
-                        </div>
+                    <div class="space-y-6" id="governance-content">
+                        <!-- Governance levels injected by JS -->
                     </div>
                 </div>
                 
-                <div class="reveal-element opacity-0 translate-y-5 mt-16 text-center">
-                    <p class="text-sm text-white/50 italic max-w-2xl mx-auto">
-                        L'assetto organizzativo collega direzione strategica, presidio operativo, materialità e monitoraggio. La sostenibilità è sistema di responsabilità, non comunicazione simbolica.
-                    </p>
+                <div class="relative">
+                    <img src="http://static.photos/people/1024x576/77" alt="Team Berlucchi" class="rounded-2xl shadow-2xl">
+                    <div class="absolute -bottom-4 -left-4 bg-white p-6 rounded-xl shadow-lg max-w-xs border border-stone-100">
+                        <p class="font-serif text-stone-900 text-lg italic mb-2">"La sostenibilità è sistema di responsabilità, non comunicazione simbolica."</p>
+                        <div class="text-xs text-stone-500 uppercase tracking-wider">Comitato Strategico</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Persone e Territorio -->
-    <section class="py-32 px-6 bg-cream border-t border-green-dark/5 people-territory">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid md:grid-cols-12 gap-8 items-center mb-20">
-                <div class="md:col-span-7 reveal-element opacity-0 translate-y-5 relative">
-                    <div class="relative overflow-hidden rounded-sm shadow-xl">
-                        <img src="http://static.photos/people/1024x576/77" alt="Team Berlucchi" class="w-full h-[28rem] object-cover people-image">
-                        <div class="absolute inset-0 bg-gradient-to-t from-green-dark/30 via-transparent to-transparent"></div>
-                    </div>
-                    <!-- Decorative element -->
-                    <div class="absolute -bottom-4 -right-4 w-24 h-24 border border-gold/30 rounded-sm -z-10"></div>
-                </div>
-                <div class="md:col-span-4 md:col-start-9 reveal-element opacity-0 translate-y-5 delay-100">
-                    <span class="text-gold text-xs tracking-[0.3em] uppercase font-medium block mb-4">Persone e territorio</span>
-                    <h2 class="font-serif text-4xl md:text-5xl text-green-dark mb-6 leading-tight">La sostenibilità oltre la sola dimensione ambientale</h2>
-                    <p class="text-charcoal/70 text-lg leading-relaxed mb-6">Persone, qualità del lavoro, relazioni di filiera e radicamento territoriale concorrono alla definizione del valore.</p>
-                    <div class="w-16 h-px bg-gold/50"></div>
-                </div>
+    <section class="py-24 bg-stone-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-serif text-4xl text-stone-900 mb-4">Persone e territorio</h2>
+                <p class="text-stone-600">La sostenibilità oltre la sola dimensione ambientale. Persone, qualità del lavoro, relazioni di filiera e radicamento territoriale.</p>
             </div>
             
             <div class="grid md:grid-cols-2 gap-12">
-                <div class="reveal-element opacity-0 translate-y-5 space-y-8">
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 rounded-full bg-green-dark/10 flex items-center justify-center shrink-0">
-                            <i data-lucide="heart-handshake" class="w-5 h-5 text-green-dark"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-serif text-xl text-green-dark mb-2">Dimensione umana</h3>
-                            <ul class="space-y-2 text-sm text-charcoal/70">
-                                <li class="flex items-start gap-2"><span class="text-gold mt-1">•</span> Centralità di salute e sicurezza nei luoghi di lavoro</li>
-                                <li class="flex items-start gap-2"><span class="text-gold mt-1">•</span> Formazione e qualità dell'occupazione</li>
-                                <li class="flex items-start gap-2"><span class="text-gold mt-1">•</span> Attenzione alla qualità del prodotto e al consumatore</li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="bg-white p-8 rounded-2xl border border-stone-200">
+                    <h3 class="font-serif text-2xl text-stone-900 mb-6 flex items-center gap-3">
+                        <i data-lucide="users" class="w-6 h-6 text-amber-700"></i>
+                        Dimensione umana
+                    </h3>
+                    <ul class="space-y-4 text-stone-600">
+                        <li class="flex items-start gap-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-700 mt-2 flex-shrink-0"></span>
+                            <span>Centralità di salute e sicurezza nei luoghi di lavoro</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-700 mt-2 flex-shrink-0"></span>
+                            <span>Formazione e qualità dell'occupazione</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-700 mt-2 flex-shrink-0"></span>
+                            <span>Attenzione alla qualità del prodotto e al consumatore</span>
+                        </li>
+                    </ul>
                 </div>
                 
-                <div class="reveal-element opacity-0 translate-y-5 delay-100 space-y-8">
-                    <div class="flex gap-4">
-                        <div class="w-12 h-12 rounded-full bg-green-dark/10 flex items-center justify-center shrink-0">
-                            <i data-lucide="mountain" class="w-5 h-5 text-green-dark"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-serif text-xl text-green-dark mb-2">Radicamento territoriale</h3>
-                            <ul class="space-y-2 text-sm text-charcoal/70">
-                                <li class="flex items-start gap-2"><span class="text-gold mt-1">•</span> Relazione strutturale con la Franciacorta</li>
-                                <li class="flex items-start gap-2"><span class="text-gold mt-1">•</span> Valore generato con i viticoltori partner</li>
-                                <li class="flex items-start gap-2"><span class="text-gold mt-1">•</span> Connessione tra identità, reputazione e sostenibilità</li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="bg-white p-8 rounded-2xl border border-stone-200">
+                    <h3 class="font-serif text-2xl text-stone-900 mb-6 flex items-center gap-3">
+                        <i data-lucide="map-pin" class="w-6 h-6 text-amber-700"></i>
+                        Radicamento territoriale
+                    </h3>
+                    <ul class="space-y-4 text-stone-600">
+                        <li class="flex items-start gap-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-700 mt-2 flex-shrink-0"></span>
+                            <span>Relazione strutturale con la Franciacorta</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-700 mt-2 flex-shrink-0"></span>
+                            <span>Valore generato con i viticoltori partner</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-700 mt-2 flex-shrink-0"></span>
+                            <span>Connessione tra identità, reputazione e sostenibilità</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Innovazione -->
-    <section class="py-24 px-6 bg-white">
-        <div class="max-w-5xl mx-auto">
-            <div class="reveal-element opacity-0 translate-y-5 mb-12 text-center">
-                <span class="text-gold text-sm tracking-[0.2em] uppercase font-medium">Innovazione e ricerca</span>
-                <h2 class="font-serif text-4xl md:text-5xl text-green-dark mt-4">La sostenibilità come evoluzione del modello</h2>
-            </div>
-            
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="reveal-element opacity-0 translate-y-5 p-6 border-t-2 border-green-dark/20 hover:border-gold transition-colors duration-500">
-                    <i data-lucide="sprout" class="w-6 h-6 text-gold mb-4"></i>
-                    <h3 class="font-serif text-lg text-green-dark mb-2">Pratiche agronomiche</h3>
-                    <p class="text-sm text-charcoal/70">Punto di intersezione tra qualità, tutela delle risorse e responsabilità di lungo periodo.</p>
+    <section class="py-24 bg-white border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-3 gap-12">
+                <div class="lg:col-span-1">
+                    <span class="text-amber-700 text-sm font-medium tracking-widest uppercase mb-2 block">Innovazione e ricerca</span>
+                    <h2 class="font-serif text-4xl text-stone-900">La sostenibilità come evoluzione del modello</h2>
                 </div>
                 
-                <div class="reveal-element opacity-0 translate-y-5 delay-100 p-6 border-t-2 border-green-dark/20 hover:border-gold transition-colors duration-500">
-                    <i data-lucide="flask-conical" class="w-6 h-6 text-gold mb-4"></i>
-                    <h3 class="font-serif text-lg text-green-dark mb-2">PBVS e sperimentazione</h3>
-                    <p class="text-sm text-charcoal/70">La ricerca rende la sostenibilità un campo di apprendimento e non solo una logica di mitigazione.</p>
-                </div>
-                
-                <div class="reveal-element opacity-0 translate-y-5 delay-200 p-6 border-t-2 border-green-dark/20 hover:border-gold transition-colors duration-500">
-                    <i data-lucide="lightbulb" class="w-6 h-6 text-gold mb-4"></i>
-                    <h3 class="font-serif text-lg text-green-dark mb-2">Innovazione come accountability</h3>
-                    <p class="text-sm text-charcoal/70">Rendere visibili i processi di innovazione rafforza la credibilità: trasformazione operativa, non solo intenzione.</p>
+                <div class="lg:col-span-2 grid md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="font-serif text-xl text-stone-900 mb-3">Pratiche agronomiche</h3>
+                        <p class="text-stone-600 text-sm leading-relaxed">Punto di intersezione tra qualità, tutela delle risorse e responsabilità di lungo periodo.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-xl text-stone-900 mb-3">PBVS e sperimentazione</h3>
+                        <p class="text-stone-600 text-sm leading-relaxed">La ricerca rende la sostenibilità un campo di apprendimento e non solo una logica di mitigazione.</p>
+                    </div>
+                    <div>
+                        <h3 class="font-serif text-xl text-stone-900 mb-3">Innovazione come accountability</h3>
+                        <p class="text-stone-600 text-sm leading-relaxed">Rendere visibili i processi di innovazione rafforza la credibilità: trasformazione operativa, non solo intenzione.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Archivio -->
-    <section id="archivio" class="py-32 px-6 bg-green-dark text-white archive-section">
-        <div class="max-w-5xl mx-auto">
-            <div class="reveal-element opacity-0 translate-y-5 mb-16 text-center">
-                <span class="text-gold text-xs tracking-[0.3em] uppercase font-medium">Archivio report e documenti</span>
-                <h2 class="font-serif text-4xl md:text-5xl mt-4 mb-6">Accesso semplice ai documenti</h2>
-                <p class="text-white/60 max-w-2xl mx-auto">Il report principale è distinto dai contenuti di archivio e dai materiali di contestualizzazione.</p>
-            </div>
-            
-            <div class="grid md:grid-cols-12 gap-8 items-center mb-16 archive-hero">
-                <!-- Main Report with Mockup -->
-                <div class="md:col-span-5 reveal-element opacity-0 translate-y-5 relative">
-                    <div class="relative">
-                        <img src="http://static.photos/workspace/640x480/88" alt="Report di Sostenibilità 2024" class="w-full h-80 object-cover rounded-sm shadow-2xl archive-mockup">
-                        <div class="absolute -inset-4 border border-gold/20 rounded-sm -z-10"></div>
-                        <div class="absolute top-4 right-4 w-12 h-12 bg-gold/90 rounded-full flex items-center justify-center shadow-lg">
-                            <i data-lucide="file-text" class="w-5 h-5 text-green-dark"></i>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="md:col-span-6 md:col-start-7 reveal-element opacity-0 translate-y-5 delay-100 space-y-8">
-                    <div>
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="w-8 h-px bg-gold/50"></span>
-                            <span class="text-gold text-xs tracking-[0.2em] uppercase font-medium">Edizione principale</span>
-                        </div>
-                        <h3 class="font-serif text-3xl mb-4 text-white">Report di Sostenibilità 2024</h3>
-                        <p class="text-white/70 leading-relaxed mb-6">Documento di riferimento del progetto. Integra governance, temi materiali, filiera, persone, territorio, innovazione e indicatori.</p>
-                    </div>
-                    
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 pt-6 border-t border-white/10">
-                        <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-full border border-gold/30 flex items-center justify-center bg-gold/5">
-                                <span class="font-serif text-xl text-gold">59,6</span>
-                            </div>
-                            <div>
-                                <div class="text-white/80 text-sm font-medium">Milioni di euro</div>
-                                <div class="text-white/40 text-xs">Valore generato</div>
-                            </div>
-                        </div>
-                        <a href="#" class="inline-flex items-center gap-3 px-8 py-4 bg-gold text-green-dark rounded-sm font-medium text-sm hover:bg-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-500 group">
-                            <span>Scarica PDF</span>
-                            <i data-lucide="download" class="w-4 h-4 group-hover:translate-y-0.5 transition-transform"></i>
-                        </a>
-                    </div>
+    <section id="archivio" class="py-24 bg-stone-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <h2 class="font-serif text-4xl text-stone-900 mb-4">Archivio report e documenti</h2>
+                    <p class="text-stone-600">Il report principale è distinto dai contenuti di archivio e dai materiali di contestualizzazione.</p>
                 </div>
             </div>
             
-            <!-- Archive Grid -->
-            <div class="grid md:grid-cols-3 gap-6">
-                <a href="#" class="reveal-element opacity-0 translate-y-5 delay-100 p-6 bg-white/5 rounded-sm border border-white/10 hover:border-white/30 transition-all duration-300 block">
-                    <span class="text-white/40 text-xs tracking-wider uppercase">Archivio 2023</span>
-                    <h4 class="font-serif text-lg mt-2 mb-3 text-white">Report 2023</h4>
-                    <div class="flex items-center gap-2 text-gold text-sm group-hover:gap-3 transition-all">
-                        <span>Consulta PDF</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl overflow-hidden border border-stone-200 shadow-sm hover:shadow-lg transition-shadow group">
+                    <div class="h-48 bg-stone-200 relative overflow-hidden">
+                        <img src="http://static.photos/workspace/640x480/88" alt="Report 2024" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-4 left-4 bg-red-900 text-white text-xs font-bold px-3 py-1 rounded-full">Edizione principale</div>
                     </div>
-                </a>
-                
-                <a href="#" class="reveal-element opacity-0 translate-y-5 delay-200 p-6 bg-white/5 rounded-sm border border-white/10 hover:border-white/30 transition-all duration-300 block">
-                    <span class="text-white/40 text-xs tracking-wider uppercase">Metodologia</span>
-                    <h4 class="font-serif text-lg mt-2 mb-3 text-white">Nota metodologica</h4>
-                    <div class="flex items-center gap-2 text-gold text-sm group-hover:gap-3 transition-all">
-                        <span>Apri documento</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    <div class="p-6">
+                        <h3 class="font-serif text-xl text-stone-900 mb-2">Report di Sostenibilità <span class="current-year-label">2024</span></h3>
+                        <p class="text-stone-600 text-sm mb-4">Documento di riferimento del progetto. Integra governance, temi materiali, filiera, persone, territorio, innovazione e indicatori.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="font-serif text-2xl text-amber-700">59,6M€</span>
+                            <button class="flex items-center gap-2 text-red-900 text-sm font-medium hover:gap-3 transition-all">
+                                Scarica PDF <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </div>
-                </a>
-                
-                <a href="#" class="reveal-element opacity-0 translate-y-5 delay-300 p-6 bg-white/5 rounded-sm border border-white/10 hover:border-white/30 transition-all duration-300 block">
-                    <span class="text-white/40 text-xs tracking-wider uppercase">Supporto</span>
-                    <h4 class="font-serif text-lg mt-2 mb-3 text-white">Documenti correlati</h4>
-                    <div class="flex items-center gap-2 text-gold text-sm group-hover:gap-3 transition-all">
-                        <span>Consulta archivio</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="py-32 px-6 bg-cream border-t border-green-dark/10 final-cta">
-        <div class="max-w-3xl mx-auto text-center">
-            <div class="reveal-element opacity-0 translate-y-5">
-                <div class="flex items-center justify-center gap-4 mb-8">
-                    <span class="w-12 h-px bg-gold/40"></span>
-                    <div class="w-12 h-12 rounded-full border border-gold/30 flex items-center justify-center">
-                        <i data-lucide="file-down" class="w-5 h-5 text-gold/60"></i>
-                    </div>
-                    <span class="w-12 h-px bg-gold/40"></span>
                 </div>
-                <h2 class="font-serif text-4xl md:text-5xl text-green-dark mb-6 leading-tight">Accedi al documento completo</h2>
-                <p class="text-charcoal/60 mb-10 leading-relaxed text-lg font-light max-w-xl mx-auto">Questa pagina offre una lettura guidata e multilivello. Per la consultazione integrale, il riferimento resta il Report di Sostenibilità 2024.</p>
-                <a href="#" class="px-10 py-5 bg-green-dark text-white rounded-sm font-medium tracking-wide hover:bg-green-dark/90 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] inline-flex items-center gap-3 group">
-                    <span>Scarica Report 2024</span>
-                    <i data-lucide="arrow-down" class="w-5 h-5 group-hover:translate-y-1 transition-transform duration-300"></i>
-                </a>
+                
+                <div class="bg-white rounded-2xl p-6 border border-stone-200 hover:border-amber-300 transition-colors">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="text-stone-400 font-serif text-4xl opacity-50">2023</span>
+                        <i data-lucide="file-text" class="w-5 h-5 text-stone-400"></i>
+                    </div>
+                    <h3 class="font-serif text-lg text-stone-900 mb-2">Report 2023</h3>
+                    <p class="text-stone-600 text-sm mb-4">Consulta l'edizione precedente per analisi comparative.</p>
+                    <a href="#" class="text-amber-700 text-sm font-medium hover:text-amber-900">Consulta PDF →</a>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 border border-stone-200 hover:border-amber-300 transition-colors">
+                    <div class="flex items-start justify-between mb-4">
+                        <span class="text-stone-400 font-serif text-4xl opacity-50">M</span>
+                        <i data-lucide="book-open" class="w-5 h-5 text-stone-400"></i>
+                    </div>
+                    <h3 class="font-serif text-lg text-stone-900 mb-2">Nota metodologica</h3>
+                    <p class="text-stone-600 text-sm mb-4">Standard GRI e criteri di rendicontazione.</p>
+                    <a href="#" class="text-amber-700 text-sm font-medium hover:text-amber-900">Apri documento →</a>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <div class="inline-flex items-center gap-4 p-4 bg-white rounded-full border border-stone-200 shadow-sm">
+                    <span class="text-stone-600 text-sm">Accedi al documento completo</span>
+                    <button class="px-6 py-2 bg-red-900 text-white rounded-full text-sm font-medium hover:bg-red-950 transition-colors">
+                        Scarica Report <span class="current-year-label">2024</span>
+                    </button>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 px-6 bg-green-dark text-white/40 border-t border-white/10">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="flex items-center gap-3">
-                <div class="w-6 h-6 rounded-full bg-gold/20 flex items-center justify-center">
-                    <span class="text-gold font-serif text-xs">B</span>
+    <footer class="bg-stone-900 text-stone-400 py-16">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-8 h-8 bg-stone-800 rounded-full flex items-center justify-center text-stone-50 font-serif font-bold">B</div>
+                    <span class="font-serif text-xl text-stone-200">Berlucchi</span>
                 </div>
-                <span class="font-serif text-white/60">Berlucchi</span>
-            </div>
-            <div class="text-xs tracking-wider">
-                Sostenibilità 2024 — Franciacorta
-            </div>
-            <div class="flex gap-6">
-                <a href="#" class="hover:text-gold transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
-                <a href="#" class="hover:text-gold transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-                <a href="#" class="hover:text-gold transition-colors"><i data-lucide="globe" class="w-4 h-4"></i></a>
+                <p class="text-sm">Sostenibilità <span class="current-year-label">2024</span> — Franciacorta</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                    <a href="#" class="hover:text-white transition-colors"><i data-lucide="mail" class="w-5 h-5"></i></a>
+                </div>
             </div>
         </div>
     </footer>
 
     <script src="main.js"></script>
     <script>
-        // Re-initialize Lucide icons after dynamic content updates
         lucide.createIcons();
-        
-        // Ensure icons are recreated after any animations complete
-        setTimeout(() => {
-            lucide.createIcons();
-        }, 100);
     </script>
 </body>
 </html>
