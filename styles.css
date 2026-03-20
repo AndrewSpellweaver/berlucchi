@@ -49,11 +49,151 @@ html {
 /* KPI Card Transitions */
 .kpi-card {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
 .kpi-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* Ghost Values - Baseline Visualization */
+.ghost-value {
+    position: absolute;
+    font-size: 0.875rem;
+    color: #d6d3d1; /* stone-300 */
+    opacity: 0.6;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Playfair Display', serif;
+    transition: all 0.3s ease;
+}
+
+.comparison-active .ghost-value {
+    opacity: 1;
+    color: #a8a29e; /* stone-400 */
+}
+
+/* Micro Labels for Directional Meaning */
+.micro-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #b45309; /* amber-700 */
+    margin-top: 0.5rem;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: all 0.4s ease;
+}
+
+.kpi-card:hover .micro-label {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hero KPI Styling */
+.kpi-hero {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #ffffff 0%, #fafaf9 100%);
+    border-left: 4px solid #b45309;
+}
+
+.kpi-hero .kpi-value {
+    font-size: 3.5rem;
+    color: #7f1d1d;
+}
+
+/* Environmental KPI Grouping */
+.kpi-environmental {
+    border-left: 3px solid #d6d3d1;
+    transition: border-color 0.3s ease;
+}
+
+.kpi-environmental:hover {
+    border-left-color: #b45309;
+}
+
+/* Mini Timeline on Hover */
+.mini-timeline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right, 
+        #e7e5e4 0%, 
+        #e7e5e4 var(--progress-start), 
+        #b45309 var(--progress-start), 
+        #b45309 var(--progress-end), 
+        #e7e5e4 var(--progress-end)
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.kpi-card:hover .mini-timeline {
+    opacity: 1;
+}
+
+/* Temporal Transition Effects */
+.temporal-blur {
+    filter: blur(4px);
+    transform: translateY(10px);
+    opacity: 0.5;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.temporal-focus {
+    filter: blur(0);
+    transform: translateY(0);
+    opacity: 1;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Comparison Mode State */
+.comparison-active-section {
+    background-color: #fffbf0 !important; /* amber-50/30 equivalent */
+}
+
+.comparison-active-section #performance-glow {
+    opacity: 0.6 !important;
+    background-color: #fcd34d;
+}
+
+/* Insight Banner Enhancement */
+#insight-banner {
+    box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+}
+
+/* Hero Year Pulse */
+@keyframes pulse-slow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.animate-pulse-slow {
+    animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Ghost connectors in comparison mode */
+.ghost-connector {
+    stroke: #d6d3d1;
+    stroke-width: 1;
+    stroke-dasharray: 4,4;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.comparison-active .ghost-connector {
+    opacity: 0.4;
+}
+
+/* Delta indicators enhancement */
+.delta-indicator {
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
 }
 
 /* Comparison Mode Indicators */
@@ -96,10 +236,34 @@ html {
 /* Toggle Switch Animation */
 #compare-toggle.active {
     background-color: #7f1d1d; /* red-900 */
+    box-shadow: 0 0 20px rgba(127, 29, 29, 0.3);
 }
 
 #compare-toggle.active #compare-toggle-knob {
     transform: translateX(1.5rem);
+}
+
+/* Comparison Toggle Enhanced States */
+.comparison-toggle-active {
+    background-color: #fffbeb !important; /* amber-50 */
+    border-color: #b45309 !important;
+}
+
+/* Year Progress Indicator */
+#temporal-progress {
+    background: linear-gradient(90deg, #b45309 0%, #d97706 100%);
+    box-shadow: 0 0 10px rgba(180, 83, 9, 0.3);
+}
+
+/* KPI Value Animation Re-entry */
+.kpi-value {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.kpi-card:hover .kpi-value {
+    transform: scale(1.05);
+    transform-origin: left center;
 }
 
 /* Image Transitions */
