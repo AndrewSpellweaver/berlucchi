@@ -137,6 +137,68 @@ const heroTaglines = {
     2024: "Trasformazione compiuta: sei anni di evoluzione responsabile."
 };
 
+const yearVisuals = {
+    2019: {
+        heroImage: 'http://static.photos/vineyard/1200x630/88',
+        filieraImage: 'http://static.photos/wine/1024x576/42',
+        territoryQuote: "La sostenibilità nasce come disciplina del fare: prima struttura, poi racconto."
+    },
+    2020: {
+        heroImage: 'http://static.photos/nature/1200x630/42',
+        filieraImage: 'http://static.photos/workspace/1024x576/31',
+        territoryQuote: "Nel tempo della crisi, la sostenibilità smette di essere promessa e diventa tenuta."
+    },
+    2021: {
+        heroImage: 'http://static.photos/people/1200x630/77',
+        filieraImage: 'http://static.photos/wine/1024x576/61',
+        territoryQuote: "La ripartenza rimette al centro la relazione: territorio, persone, ospitalità."
+    },
+    2022: {
+        heroImage: 'http://static.photos/wine/1200x630/61',
+        filieraImage: 'http://static.photos/vineyard/1024x576/12',
+        territoryQuote: "La crescita internazionale ha valore solo se resta coerente con l’origine."
+    },
+    2023: {
+        heroImage: 'http://static.photos/workspace/1200x630/88',
+        filieraImage: 'http://static.photos/people/1024x576/77',
+        territoryQuote: "La governance rende la sostenibilità leggibile: non iniziativa episodica, ma struttura."
+    },
+    2024: {
+        heroImage: 'http://static.photos/vineyard/1200x630/88',
+        filieraImage: 'http://static.photos/wine/1024x576/42',
+        territoryQuote: "La sostenibilità nasce dalla terra, si traduce in gesto, si completa in bottiglia."
+    }
+};
+
+const governanceByYear = {
+    2019: [
+        { level: 'Impostazione', title: 'Definizione perimetro', text: 'Anno base di formalizzazione del perimetro ESG e dei primi criteri di misurazione.' },
+        { level: 'Priorità', title: 'Ambiente e governance', text: 'La struttura è ancora essenziale ma già orientata alla leggibilità delle responsabilità.' }
+    ],
+    2020: [
+        { level: 'Resilienza', title: 'Continuità decisionale', text: 'La sostenibilità sostiene la tenuta organizzativa in fase di contrazione e incertezza.' },
+        { level: 'Priorità', title: 'Energia e protezione sociale', text: 'L’attenzione si sposta su sicurezza, continuità operativa e accelerazione energetica.' }
+    ],
+    2021: [
+        { level: 'Riconnessione', title: 'Territorio e relazioni', text: 'La governance torna a legarsi con forza a hospitality, territorio e filiera partner.' },
+        { level: 'Priorità', title: 'Filiera corta', text: 'La rete di conferitori consolida la sostenibilità come sistema relazionale.' }
+    ],
+    2022: [
+        { level: 'Espansione', title: 'Sostenibilità e crescita', text: 'L’aumento dell’export rende più rilevante il presidio dei processi e della coerenza narrativa.' },
+        { level: 'Priorità', title: 'Innovazione e processo', text: 'La sostenibilità si lega alla sperimentazione agronomica e alla qualità operativa.' }
+    ],
+    2023: [
+        { level: 'Maturità', title: 'Governance rinforzata', text: 'La struttura decisionale diventa più leggibile e il reporting più coerente con i processi.' },
+        { level: 'Priorità', title: 'Economia circolare', text: 'Il recupero rifiuti e la gestione strutturata rafforzano la credibilità del sistema.' }
+    ],
+    2024: [
+        { level: 'Assetto', title: 'Governance integrata', text: 'La sostenibilità appare come management integrato: visibile, ordinato, con responsabilità distribuite.' },
+        { level: 'Priorità', title: 'Equilibrio a quattro assi', text: 'Ambiente, sociale, territorio e governance convergono in una struttura pienamente leggibile.' }
+    ]
+};
+
+const archiveDocuments = [2024, 2023, 2022, 2021, 2020, 2019];
+
 // State Management
 let currentState = {
     year: 2024,
@@ -157,6 +219,20 @@ const perfYear = document.getElementById('perf-year');
 const filieraYear = document.getElementById('filiera-year');
 const compareHint = document.getElementById('compare-hint');
 const yearsHistory = document.getElementById('years-history');
+const navbar = document.getElementById('navbar');
+const yearNavShell = document.getElementById('year-nav');
+const heroMedia = document.getElementById('hero-image') || document.querySelector('.hero-media');
+const heroStage = document.querySelector('.hero-stage');
+const heroCopy = document.querySelector('.hero-copy');
+const heroMetaPanel = document.querySelector('.hero-meta-panel');
+const heroBadgeWrap = document.querySelector('.hero-badge-wrap');
+const desktopNavLinks = document.querySelectorAll('.nav-link');
+const observedSections = document.querySelectorAll('section[id], section[data-reveal]');
+const heroImage = document.getElementById('hero-image');
+const filieraImage = document.getElementById('filiera-image');
+const governanceContent = document.getElementById('governance-content');
+const archiveGrid = document.getElementById('archive-grid');
+const territoryQuote = document.getElementById('territory-quote');
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
@@ -165,10 +241,23 @@ document.addEventListener('DOMContentLoaded', () => {
     updateContent(currentState.year);
     setupEventListeners();
     setupIntersectionObserver();
-    
+    setupSectionSpy();
+    setupHeroParallax();
+    setupScrollChrome();
+
     // Set initial temporal progress
     const progressPercent = ((currentState.year - 2019) / 5) * 100;
     document.getElementById('temporal-progress').style.width = `${progressPercent}%`;
+
+    // Prime visible sections above the fold
+    requestAnimationFrame(() => {
+        document.querySelectorAll('.reveal-section').forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.88) {
+                section.classList.add('is-visible');
+            }
+        });
+    });
 });
 
 // Year Selector Initialization
@@ -201,6 +290,8 @@ function handleYearChange(year) {
     const kpiCards = document.querySelectorAll('.kpi-card');
     const perfSection = document.getElementById('performance');
     
+    perfSection.classList.add('temporal-shift');
+    
     kpiCards.forEach(card => {
         card.classList.add('temporal-blur');
         card.classList.remove('temporal-focus');
@@ -220,6 +311,8 @@ function handleYearChange(year) {
         currentState.previousYear = currentState.year;
         currentState.year = year;
         updateContent(year);
+	currentState.previousYear = currentState.year;
+        perfSection.classList.remove('temporal-shift');
         
         // Restore with focus effect
         kpiCards.forEach((card, index) => {
@@ -242,27 +335,21 @@ function handleYearChange(year) {
 function updateContent(year) {
     const data = sustainabilityData[year];
     const baseData = sustainabilityData[2019];
-    
-    // Update text elements
+
     heroYear.textContent = year;
     heroAnnualita.textContent = year;
     perfYear.textContent = year;
     filieraYear.textContent = year;
-    yearsHistory.textContent = 63 + (year - 2024); // Dynamic years since 1961
-    
-    // Update insight
+    yearsHistory.textContent = 63 + (year - 2024);
+
     updateInsight(data, baseData, year);
-    
-    // Update KPIs with animation
     updateKPIs(data, baseData);
-    
-    // Update Materialità
     updateMaterialita(data.materialitaFocus);
-    
-    // Update Filiera
     updateFiliera(year);
-    
-    // Update year labels across page
+    updateGovernance(year);
+    updateArchive(year);
+    updateHeroVisuals(year);
+
     document.querySelectorAll('.current-year-label').forEach(el => {
         el.textContent = year;
     });
@@ -302,14 +389,7 @@ function updateInsight(data, baseData, year) {
         insightBanner.style.opacity = '1';
         insightBanner.style.transform = 'translateY(0)';
         
-        // Update meta line
-        const metaLine = document.getElementById('insight-meta');
-        if (year === 2019) {
-            metaLine.textContent = 'Anno base';
-        } else {
-            const yearsDelta = year - 2019;
-            metaLine.textContent = `Analisi comparativa ${yearsDelta} anni • vs 2019`;
-        }
+        // metadata line intentionally omitted in current layout
     }, 300);
     
     // Update hero tagline
@@ -326,134 +406,221 @@ function updateInsight(data, baseData, year) {
 // Render KPI Grid with Hierarchy and Ghost Values
 function renderKPIs() {
     kpiGrid.innerHTML = '';
-    
-    kpiDefinitions.forEach((kpi, index) => {
-        const isHero = kpi.hero ? 'kpi-hero md:col-span-2' : '';
-        const isEnvironmental = kpi.environmental ? 'kpi-environmental' : '';
+
+    const heroMetrics = kpiDefinitions.filter(kpi => kpi.hero);
+    const secondaryMetrics = kpiDefinitions.filter(kpi => !kpi.hero);
+
+    const heroColumn = document.createElement('div');
+    heroColumn.className = 'kpi-board__hero';
+
+    const sideColumn = document.createElement('div');
+    sideColumn.className = 'kpi-board__side';
+
+    heroMetrics.forEach((kpi, index) => {
         const progressPercent = ((currentState.year - 2019) / 5) * 100;
-        
-        const card = document.createElement('div');
-        card.className = `kpi-card ${isHero} ${isEnvironmental} bg-white p-6 rounded-2xl border border-stone-200 shadow-sm stagger-${(index % 4) + 1}`;
-        
-        // Calculate ghost value (2019 baseline)
         const baseValue = sustainabilityData[2019][kpi.key];
-        const ghostDisplay = kpi.format === 'int' ? 
-            Math.round(baseValue).toLocaleString('it-IT') : 
-            baseValue.toFixed(1).replace('.', ',');
-        
+        const ghostDisplay = kpi.format === 'int'
+            ? Math.round(baseValue).toLocaleString('it-IT')
+            : baseValue.toFixed(1).replace('.', ',');
+
+        const card = document.createElement('article');
+        card.className = `kpi-card kpi-card--hero ${kpi.environmental ? 'kpi-card--environmental' : ''}`;
         card.innerHTML = `
-            <div class="flex items-start justify-between mb-2 relative">
-                <span class="text-xs font-medium text-stone-500 uppercase tracking-wider">${kpi.prefix || ''}${kpi.label}</span>
+            <div class="kpi-card__header flex items-start justify-between mb-3 relative">
+                <span class="kpi-card__label text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    ${kpi.prefix || ''}${kpi.label}
+                </span>
                 <span class="delta-indicator hidden text-xs font-bold px-2 py-1 rounded-full"></span>
                 ${currentState.compareMode ? `<span class="ghost-value">2019: ${ghostDisplay}</span>` : ''}
             </div>
-            <div class="flex items-baseline gap-1 relative">
-                <span class="text-3xl font-serif text-stone-900 kpi-value ${kpi.hero ? 'text-5xl' : ''}" data-key="${kpi.key}" data-format="${kpi.format}" data-micro-label="${kpi.microLabel || ''}">0</span>
-                <span class="text-sm text-stone-500 kpi-unit">${kpi.unit}</span>
+
+            <div class="kpi-card__value-wrap flex items-baseline gap-2 relative">
+                <span
+                    class="kpi-value text-4xl md:text-6xl font-serif text-stone-900"
+                    data-key="${kpi.key}"
+                    data-format="${kpi.format}"
+                    data-micro-label="${kpi.microLabel || ''}"
+                >0</span>
+                <span class="kpi-unit text-base text-stone-500">${kpi.unit}</span>
             </div>
+
             <div class="micro-label">${kpi.microLabel || ''}</div>
+
             <div class="mini-timeline" style="--progress-start: 0%; --progress-end: ${progressPercent}%"></div>
-            <div class="mt-3 h-8 w-full opacity-30">
+
+            <div class="kpi-card__sparkline mt-4 h-10 w-full opacity-30">
                 <svg class="w-full h-full sparkline" viewBox="0 0 100 20" preserveAspectRatio="none">
-                    <path d="M0,${20 - (index * 2)} Q25,${15 - index} 50,${10 + index} T100,${5 + (index % 3)}" />
+                    <path d="M0,12 Q25,10 50,8 T100,4" />
                 </svg>
             </div>
         `;
-        kpiGrid.appendChild(card);
+        heroColumn.appendChild(card);
     });
-}
 
+    secondaryMetrics.forEach((kpi, index) => {
+        const progressPercent = ((currentState.year - 2019) / 5) * 100;
+        const baseValue = sustainabilityData[2019][kpi.key];
+        const ghostDisplay = kpi.format === 'int'
+            ? Math.round(baseValue).toLocaleString('it-IT')
+            : baseValue.toFixed(1).replace('.', ',');
+
+        const card = document.createElement('article');
+        card.className = `kpi-card kpi-card--secondary ${kpi.environmental ? 'kpi-card--environmental' : ''}`;
+        card.innerHTML = `
+            <div class="kpi-card__header flex items-start justify-between mb-2 relative">
+                <span class="kpi-card__label text-xs font-medium text-stone-500 uppercase tracking-wider">
+                    ${kpi.prefix || ''}${kpi.label}
+                </span>
+                <span class="delta-indicator hidden text-xs font-bold px-2 py-1 rounded-full"></span>
+                ${currentState.compareMode ? `<span class="ghost-value">2019: ${ghostDisplay}</span>` : ''}
+            </div>
+
+            <div class="kpi-card__value-wrap flex items-baseline gap-1 relative">
+                <span
+                    class="kpi-value text-3xl font-serif text-stone-900"
+                    data-key="${kpi.key}"
+                    data-format="${kpi.format}"
+                    data-micro-label="${kpi.microLabel || ''}"
+                >0</span>
+                <span class="kpi-unit text-sm text-stone-500">${kpi.unit}</span>
+            </div>
+
+            <div class="micro-label">${kpi.microLabel || ''}</div>
+
+            <div class="mini-timeline" style="--progress-start: 0%; --progress-end: ${progressPercent}%"></div>
+
+            <div class="kpi-card__sparkline mt-3 h-8 w-full opacity-25">
+                <svg class="w-full h-full sparkline" viewBox="0 0 100 20" preserveAspectRatio="none">
+                    <path d="M0,${20 - (index % 5) * 2} Q25,12 50,10 T100,${6 + (index % 4)}" />
+                </svg>
+            </div>
+        `;
+        sideColumn.appendChild(card);
+    });
+
+    kpiGrid.appendChild(heroColumn);
+    kpiGrid.appendChild(sideColumn);
+}
 // Update KPIs with Ghost Values and Enhanced Comparison
-function updateKPIs(data, baseData) {
+function updateKPIs(data) {
     const cards = document.querySelectorAll('.kpi-card');
-    const baseLineData = sustainabilityData[2019];
-    
-    cards.forEach((card, index) => {
+    const baselineData = sustainabilityData[2019];
+
+    cards.forEach((card) => {
         const valueEl = card.querySelector('.kpi-value');
         const indicator = card.querySelector('.delta-indicator');
-        const ghostEl = card.querySelector('.ghost-value');
         const microLabel = card.querySelector('.micro-label');
-        
+        const header = card.querySelector('.kpi-card__header');
+
+        if (!valueEl || !indicator || !microLabel || !header) return;
+
         const key = valueEl.dataset.key;
         const format = valueEl.dataset.format;
-        const newValue = data[key];
-        const baseValue = baseLineData[key];
-        
-        // Update ghost value visibility based on comparison mode
-        if (currentState.compareMode && currentState.year !== 2019) {
-            if (!ghostEl) {
-                const ghost = document.createElement('span');
-                ghost.className = 'ghost-value';
-                ghost.textContent = `2019: ${format === 'int' ? 
-                    Math.round(baseValue).toLocaleString('it-IT') : 
-                    baseValue.toFixed(1).replace('.', ',')}`;
-                card.querySelector('.flex.items-start').appendChild(ghost);
-            } else {
-                ghostEl.style.opacity = '1';
-            }
-            
-            // Show connector line for hero KPIs
-            if (kpiDefinitions[index].hero) {
-                card.style.borderLeftWidth = '4px';
-                card.style.borderLeftColor = '#b45309';
-            }
-        } else if (ghostEl) {
-            ghostEl.style.opacity = '0';
-        }
-        
-        // Animate number from zero (re-measurement effect)
-        animateNumber(valueEl, 0, newValue, format, 1000); // Slower, more dramatic
-        
-        // Update directional micro-label
-        if (microLabel && valueEl.dataset.microLabel) {
-            const diff = newValue - baseValue;
-            const percent = ((diff / baseValue) * 100).toFixed(0);
-            
-            if (currentState.year === 2019) {
-                microLabel.textContent = 'anno base';
-            } else if (percent > 30) {
-                microLabel.textContent = `trasformazione significativa (+${percent}%)`;
-            } else if (percent > 10) {
-                microLabel.textContent = `crescita solida (+${percent}%)`;
+        const unitEl = card.querySelector('.kpi-unit');
+
+        const currentValue = data[key];
+        const baselineValue = baselineData[key];
+
+        const inCompareMode = currentState.compareMode && currentState.year !== 2019;
+        const isBaseYear = currentState.year === 2019;
+
+        // -------- Number animation --------
+        animateNumber(valueEl, 0, currentValue, format, 1000);
+
+        // -------- Qualitative editorial label --------
+        let qualitativeText = 'anno base';
+
+        if (!isBaseYear) {
+            const diff = currentValue - baselineValue;
+            const percent = (diff / baselineValue) * 100;
+
+            if (percent >= 30) {
+                qualitativeText = `trasformazione significativa (+${percent.toFixed(0)}%)`;
+            } else if (percent >= 10) {
+                qualitativeText = `crescita solida (+${percent.toFixed(0)}%)`;
             } else if (percent > 0) {
-                microLabel.textContent = `evoluzione graduale (+${percent}%)`;
+                qualitativeText = `evoluzione graduale (+${percent.toFixed(0)}%)`;
+            } else if (percent === 0) {
+                qualitativeText = `stabilità (0%)`;
             } else {
-                microLabel.textContent = 'stabilizzazione';
+                qualitativeText = `contrazione (${percent.toFixed(0)}%)`;
             }
         }
-        
-        // Update comparison indicator with interpretive styling
-        if (currentState.compareMode && currentState.year !== 2019) {
-            const diff = newValue - baseValue;
-            const percent = ((diff / baseValue) * 100).toFixed(1);
+
+        microLabel.textContent = qualitativeText;
+
+        // -------- Card mode classes --------
+        card.classList.toggle('is-compare', inCompareMode);
+        card.classList.toggle('is-standard', !inCompareMode);
+
+        // -------- Ghost value (2019 baseline) --------
+        let ghostEl = card.querySelector('.ghost-value');
+
+        if (inCompareMode) {
+            const formattedBaseline =
+                format === 'int'
+                    ? Math.round(baselineValue).toLocaleString('it-IT')
+                    : baselineValue.toFixed(1).replace('.', ',');
+
+            const unitText = unitEl ? unitEl.textContent.trim() : '';
+
+            if (!ghostEl) {
+                ghostEl = document.createElement('span');
+                ghostEl.className = 'ghost-value';
+                header.appendChild(ghostEl);
+            }
+
+            ghostEl.textContent = `2019: ${formattedBaseline}${unitText ? ' ' + unitText : ''}`;
+            ghostEl.style.display = '';
+        } else if (ghostEl) {
+            ghostEl.style.display = 'none';
+        }
+
+        // -------- Delta pill --------
+        if (inCompareMode) {
+            const diff = currentValue - baselineValue;
+            const percent = ((diff / baselineValue) * 100);
             const isPositive = diff >= 0;
-            
-            indicator.classList.remove('hidden');
-            indicator.className = `delta-indicator inline-flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${isPositive ? 'bg-amber-100 text-amber-800' : 'bg-stone-200 text-stone-600'}`;
-            indicator.innerHTML = `
-                <i data-lucide="${isPositive ? 'arrow-up-right' : 'minus'}" class="w-3 h-3"></i>
-                ${isPositive ? '+' : ''}${percent}%
-            `;
-            
-            // Add directional meaning based on magnitude
-            if (percent > 20) {
-                indicator.innerHTML += ` <span class="text-[10px] opacity-70 ml-1">strutturale</span>`;
+
+            let magnitudeLabel = '';
+            const absPercent = Math.abs(percent);
+
+            if (absPercent >= 20) {
+                magnitudeLabel = 'strutturale';
+            } else if (absPercent >= 10) {
+                magnitudeLabel = 'significativa';
+            } else {
+                magnitudeLabel = 'graduale';
             }
-            
-            lucide.createIcons();
-        } else if (indicator) {
+
+            indicator.classList.remove('hidden');
+            indicator.style.display = 'inline-flex';
+            indicator.innerHTML = `
+                <i data-lucide="${isPositive ? 'arrow-up-right' : 'arrow-down-right'}" class="w-3 h-3"></i>
+                ${isPositive ? '+' : ''}${percent.toFixed(1)}%
+                <span class="delta-indicator__meta">${magnitudeLabel}</span>
+            `;
+        } else {
             indicator.classList.add('hidden');
+            indicator.style.display = 'none';
+            indicator.innerHTML = '';
         }
-        
-        // Update mini timeline progress
+
+        // -------- Micro-label visibility logic --------
+        // Standard: hidden until hover/focus
+        // Compare: completely suppressed
+        microLabel.classList.toggle('is-suppressed', inCompareMode || isBaseYear);
+
+        // -------- Timeline progress --------
         const miniTimeline = card.querySelector('.mini-timeline');
         if (miniTimeline) {
             const progress = ((currentState.year - 2019) / 5) * 100;
             miniTimeline.style.setProperty('--progress-end', `${progress}%`);
         }
     });
-}
 
+    lucide.createIcons();
+}
 // Enhanced Number Animation with Re-measurement Effect
 function animateNumber(element, start, end, format, customDuration = 800) {
     const duration = customDuration;
@@ -558,6 +725,95 @@ function updateFiliera(year) {
     }).join('');
 }
 
+function updateGovernance(year) {
+    if (!governanceContent) return;
+
+    const items = governanceByYear[year] || governanceByYear[2024];
+
+    governanceContent.innerHTML = items.map((item, index) => `
+        <article class="governance-node governance-node--${index + 1}">
+            <div class="governance-node__meta">${item.level}</div>
+            <h3 class="governance-node__title">${item.title}</h3>
+            <p class="governance-node__text">${item.text}</p>
+        </article>
+    `).join('');
+}
+
+function updateArchive(activeYear) {
+    if (!archiveGrid) return;
+
+    archiveGrid.innerHTML = archiveDocuments.map(year => {
+        const data = sustainabilityData[year];
+        const isCurrent = year === activeYear;
+
+        return `
+            <article class="archive-card ${isCurrent ? 'is-current' : ''}">
+                <div class="archive-card__year">${year}</div>
+                <div class="archive-card__body">
+                    <h3 class="archive-card__title">Report di Sostenibilità ${year}</h3>
+                    <p class="archive-card__text">${data.insight}</p>
+                    <dl class="archive-card__meta">
+                        <div><dt>Valore</dt><dd>${data.valoreGenerato.toFixed(1).replace('.', ',')} M€</dd></div>
+                        <div><dt>Fotovoltaico</dt><dd>${data.fotovoltaico}%</dd></div>
+                        <div><dt>Visitatori</dt><dd>${Math.round(data.visitatori).toLocaleString('it-IT')}</dd></div>
+                    </dl>
+                </div>
+                <div class="archive-card__cta">
+                    <button
+                        class="archive-btn ${isCurrent ? 'is-current' : ''}"
+                        data-archive-year="${year}"
+                        ${isCurrent ? 'disabled aria-disabled="true"' : ''}
+                    >
+                        ${isCurrent ? 'Edizione attiva' : 'Apri scheda'}
+                    </button>
+                </div>
+            </article>
+        `;
+    }).join('');
+
+    archiveGrid.querySelectorAll('[data-archive-year]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const year = parseInt(btn.dataset.archiveYear, 10);
+            if (year !== currentState.year) {
+                handleYearChange(year);
+
+                const perf = document.getElementById('performance');
+                if (perf) {
+                    perf.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        });
+    });
+}
+
+function updateHeroVisuals(year) {
+    const visual = yearVisuals[year] || yearVisuals[2024];
+
+    if (heroImage) {
+        heroImage.style.opacity = '0';
+        setTimeout(() => {
+            heroImage.src = visual.heroImage;
+            heroImage.style.opacity = '0.9';
+        }, 220);
+    }
+
+    if (filieraImage) {
+        filieraImage.style.opacity = '0';
+        setTimeout(() => {
+            filieraImage.src = visual.filieraImage;
+            filieraImage.style.opacity = '1';
+        }, 220);
+    }
+
+    if (territoryQuote) {
+        territoryQuote.style.opacity = '0';
+        setTimeout(() => {
+            territoryQuote.textContent = `“${visual.territoryQuote}”`;
+            territoryQuote.style.opacity = '1';
+        }, 220);
+    }
+}
+
 // Step Highlight Interaction
 function highlightStep(element) {
     document.querySelectorAll('.filiera-step').forEach(el => {
@@ -597,7 +853,7 @@ function setupEventListeners() {
                     ghost.textContent = `2019: ${format === 'int' ? 
                         Math.round(baseValue).toLocaleString('it-IT') : 
                         baseValue.toFixed(1).replace('.', ',')}`;
-                    card.querySelector('.flex.items-start').appendChild(ghost);
+                    card.querySelector('.kpi-card__header').appendChild(ghost);
                     
                     // Fade in ghost
                     setTimeout(() => {
@@ -639,35 +895,133 @@ function setupEventListeners() {
 
 // Intersection Observer for Scroll Animations
 function setupIntersectionObserver() {
-    const observer = new IntersectionObserver((entries) => {
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            }
+        });
+    }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -8% 0px'
+    });
+
+    document.querySelectorAll('.reveal-section').forEach(section => {
+        revealObserver.observe(section);
+    });
+
+    const itemObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate-fade-in');
-                observer.unobserve(entry.target);
             }
         });
     }, {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     });
-    
+
     document.querySelectorAll('.kpi-card, .materialita-card, .filiera-step').forEach(el => {
-        observer.observe(el);
+        itemObserver.observe(el);
     });
 }
 
-// Sticky Year Navigation behavior
-let lastScroll = 0;
-const yearNav = document.getElementById('year-nav');
+function setupSectionSpy() {
+    const sectionsForSpy = document.querySelectorAll('#identita, #performance, #filiera, #governance, #archivio');
+    const mobileLinks = document.querySelectorAll('#mobile-menu a[href^="#"]');
 
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > lastScroll && currentScroll > 100) {
-        yearNav.style.transform = 'translateY(-100%)';
-    } else {
-        yearNav.style.transform = 'translateY(0)';
-    }
-    
-    lastScroll = currentScroll;
-});
+    sectionsForSpy.forEach(section => {
+        section.classList.add('section-active-anchor');
+    });
+
+    const spy = new IntersectionObserver((entries) => {
+        const visibleEntries = entries
+            .filter(entry => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (!visibleEntries.length) return;
+
+        const activeEntry = visibleEntries[0];
+        const id = activeEntry.target.id;
+
+        desktopNavLinks.forEach(a => a.classList.remove('is-active'));
+        mobileLinks.forEach(a => a.classList.remove('text-red-900', 'font-medium'));
+        document.querySelectorAll('.section-active-anchor').forEach(sec => sec.classList.remove('is-current'));
+
+        const desktopLink = document.querySelector(`.nav-link[data-section="${id}"]`);
+        const mobileLink = document.querySelector(`#mobile-menu a[href="#${id}"]`);
+
+        if (desktopLink) desktopLink.classList.add('is-active');
+        if (mobileLink) mobileLink.classList.add('text-red-900', 'font-medium');
+
+        activeEntry.target.classList.add('is-current');
+    }, {
+        threshold: [0.2, 0.35, 0.5, 0.65],
+        rootMargin: '-18% 0px -30% 0px'
+    });
+
+    sectionsForSpy.forEach(section => spy.observe(section));
+}
+
+function setupHeroParallax() {
+    if (!heroMedia || !heroStage) return;
+
+    let ticking = false;
+
+    const updateParallax = () => {
+        const scrollY = window.scrollY;
+        const heroLimit = window.innerHeight * 1.05;
+
+        if (scrollY <= heroLimit) {
+            const mediaY = scrollY * 0.16;
+            const stageY = scrollY * 0.04;
+            const copyY = scrollY * -0.018;
+            const panelY = scrollY * -0.01;
+            const badgeY = scrollY * -0.025;
+            const fade = Math.max(0.82, 1 - scrollY / (window.innerHeight * 2));
+
+            heroMedia.style.transform = `scale(1.06) translate3d(0, ${mediaY}px, 0)`;
+            heroStage.style.transform = `translate3d(0, ${stageY}px, 0)`;
+
+            if (heroCopy) heroCopy.style.transform = `translate3d(0, ${copyY}px, 0)`;
+            if (heroMetaPanel) heroMetaPanel.style.transform = `translate3d(0, ${panelY}px, 0)`;
+            if (heroBadgeWrap) heroBadgeWrap.style.transform = `translate3d(0, ${badgeY}px, 0)`;
+
+            heroStage.style.opacity = fade.toString();
+        } else {
+            heroStage.style.opacity = '0.82';
+        }
+
+        ticking = false;
+    };
+
+    updateParallax();
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', updateParallax, { passive: true });
+}
+
+function setupScrollChrome() {
+    const onScroll = () => {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > 24) {
+            navbar.classList.add('nav-compact');
+            yearNavShell.classList.add('year-nav-condensed');
+        } else {
+            navbar.classList.remove('nav-compact');
+            yearNavShell.classList.remove('year-nav-condensed');
+        }
+
+        yearNavShell.style.transform = 'translateY(0)';
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+}
